@@ -6,7 +6,7 @@ The theme is one JSON file. A Python script generates it, and T3 Code's `t3 them
 
 | | |
 |---|---|
-| Current version | **v7** (`themes/soft-bloom.json`) |
+| Current version | **v8** (`themes/soft-bloom.json`) |
 | Built against | T3 Code `0.1.10-nightly.20261116` |
 | Needs | A T3 Code build with **theme CSS** support (nightly as of Nov 2026). Stable `0.1.9` only applies the colours. See [Compatibility](#compatibility). |
 | Appearance | Dark only |
@@ -50,7 +50,7 @@ How Soft Bloom interacts with T3 Code's own settings. Everything here was checke
 | T3 setting | What happens |
 |---|---|
 | **Appearance → Color scheme** | The theme defines only a dark appearance. Use Dark or System; Light isn't designed for. |
-| **Glass opacity** | Dialogs, menus, popovers, the command palette and toasts follow it (small popups add 8% so text behind them stays out of the way). The **chat bar** is fixed at 50% by the theme so its frost stays visible. Raise the slider for more solid popups. |
+| **Glass opacity** | Dialogs, menus, popovers, the command palette and toasts follow it, kept deep: dialogs add 12%, small popups add 14%. The **chat bar** is fixed at 50% by the theme so its frost stays visible. Raise the slider for more solid popups. |
 | **Contrast** | Works. T3 derives its contrast colours from the theme's tokens. |
 | **Chat width** | Tuned for *Comfortable*. With *Wide*, the text column reaches further right and can overlap the faint edge of the star art. It stays readable because the art is masked under the text, but it looks busier. *(Not visually tested.)* |
 | **Typography / font sizes** | Unaffected. |

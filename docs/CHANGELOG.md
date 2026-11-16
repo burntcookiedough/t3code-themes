@@ -1,6 +1,10 @@
 # Changelog
 
-## v7 (current)
+## v8 (current)
+- Settings, Usage and every other popup are now **darker than the main screen** instead of lighter. They use a deep ink tint (`#060607`, Glass opacity + 12%; small popups + 14%), a darker dim layer behind modals (62%), a deeper shadow with a thin top highlight, a darker Settings nav, and quieter cards and selected rows.
+- Fix: the publish scripts fall back to `~/.t3/bin/t3.cmd` when `t3` isn't on PATH.
+
+## v7
 - **Fix:** switch knobs were invisible in Settings. T3 paints knobs and select triggers with `--background`, which v6 made transparent inside modals. It's now solid `#0e0e11` there.
 - **Performance:** the right panel no longer uses a live blur (it slides and resizes, so the blur lagged). It's a 90% tint instead.
 - **Performance:** removed the `:has()` on the root wrapper (it made the browser re-check style app-wide). The Pull requests page shades the star itself instead.

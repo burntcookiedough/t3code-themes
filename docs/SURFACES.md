@@ -1,4 +1,4 @@
-# Surface audit (v7)
+# Surface audit (v8)
 
 Every surface checked, how it was checked, and what's known. "Live" means it was verified in a running T3 Code `0.1.10-nightly.20261116` web client at 1707×960, or in the desktop app where it says so.
 
@@ -18,7 +18,7 @@ Every surface checked, how it was checked, and what's known. "Live" means it was
 | New-thread page | T3's cover layer cleared | Live | |
 | Pull requests page | transparent + shade over the star, glass header | Live | |
 | Usage dialog | modal glass + token layer | Live | Provider bar colours are T3's brand colours and are kept. |
-| Settings → General | modal glass, transparent nav, hairline group cards | Live | Switch knobs fixed in v7. |
+| Settings → General | deep ink modal, darker nav, hairline group cards | Live (v8) | Switch knobs fixed in v7. |
 | Settings → Appearance | same | Live | |
 | Settings → Providers | same | Live | |
 | Other Settings pages | same building blocks (`settings-group`, switch, select-trigger, input) | Not individually opened | Expected to match. Send a screenshot if one doesn't. |
@@ -27,7 +27,7 @@ Every surface checked, how it was checked, and what's known. "Live" means it was
 | Command palette | shared popup glass | Not opened | The shortcut couldn't be triggered in the preview. |
 | Toasts | shared popup glass | Not seen | No toast fired during testing. |
 | Tooltips | 94% solid, small shadow | Rule only | |
-| Modal dim layers | black 45% + 3px blur | Live | The popover click-catcher stays invisible. |
+| Modal dim layers | near-black 62% + 4px blur | Live (v8) | The popover click-catcher stays invisible. |
 | Right panel (browser / terminal / files / diff) | 90% deep tint, hairline, no blur | Live | Blur removed in v7 because opening the panel lagged. |
 | Terminal drawer | top hairline; terminal colours from roles | Rule only | The terminal canvas keeps an opaque background for legibility. |
 | Thread details card | T3's own glass with theme tokens | Live | |

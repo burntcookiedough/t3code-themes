@@ -38,8 +38,8 @@ html / body
         ├─ [data-workspace-area="pull-requests"]   transparent + shade over the star
         └─ [data-workspace-area="panel"]   right panel: 90% tint, NO blur
 portals (outside the wrapper)
-   [data-slot$="-popup"]       one glass recipe for every popup
-   [data-slot$="-backdrop"]    one dim layer for every modal
+   [data-slot$="-popup"]       deep ink glass, darker than the scene (#060607, Glass opacity +12%)
+   [data-slot$="-backdrop"]    one dim layer for every modal (62%)
 ```
 
 **Why the scene is on the wrapper rather than `body`:** the wrapper is the root of T3's app layout and spans the window, so one scene sits behind the sidebar, the chat, the Pull requests page and the right panel. Portaled popups still blur it, because `backdrop-filter` sees everything painted behind them.
@@ -63,7 +63,7 @@ T3 builds almost every surface from about 15 CSS variables. Overriding them is w
 
 `--background` is deliberately **not** made transparent globally. T3 uses it both as a page surface and as the fill for small controls (switch knobs, select triggers). So the theme clears specific page layers instead. Inside modals it's set to solid `#0e0e11` (see the v7 fix in the changelog).
 
-Inside big modals (`dialog`, `sheet`, `alert-dialog`, `command-dialog`) a second token layer applies: `--sidebar: transparent`, `--card: cream 7%`, and cream-tinted sidebar row states. This makes Settings' left nav and group cards glass-over-glass.
+Inside big modals (`dialog`, `sheet`, `alert-dialog`, `command-dialog`) a second token layer applies: `--background: #08080a` (solid, for knobs and triggers), `--sidebar: transparent`, `--card: cream 4.5%`, and quiet cream row states. Settings' nav sits a shade darker (`black 22%`). Popups are deliberately *darker* than the scene, so opening one feels like sinking in rather than lifting a lighter panel.
 
 ## Stable hooks the theme relies on
 

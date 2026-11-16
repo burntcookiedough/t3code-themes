@@ -17,6 +17,8 @@ P = dict(base="#09090b", deep="#060607", skyTop="#060607", skyBottom="#0d0c0f", 
          raised="#18181c", hover="#1f1f24", input="#2a2a30", line="#1b1b20", bubble="#16161a",
          text="#ede6d6", muted="#9b968c", faint="#938d84", accent="#f1e7d0", accentHover="#faf1de")
 CREAM = P["accent"]
+INK = "#060607"        # deep glass tint for popups / dialogs (darker than the scene)
+INK_SOLID = "#08080a"  # solid fill for knobs and triggers inside dialogs
 
 
 def uri(svg):
@@ -154,7 +156,7 @@ def roles(p):
     }
 
 
-CSS = f"""/* Soft Bloom v7 - one dithered scene behind the whole window; sidebar and chat sit on top as glass. */
+CSS = f"""/* Soft Bloom v8 - one dithered scene behind the whole window; sidebar and chat sit on top as glass. */
 
 /* The scene lives on the root layout wrapper, so it spans sidebar + chat */
 [data-slot="sidebar-wrapper"] {{
@@ -366,16 +368,21 @@ CSS = f"""/* Soft Bloom v7 - one dithered scene behind the whole window; sidebar
 /* ---------- Popups & overlays ----------
    Every T3 popup slot ends in "-popup" (dialog, sheet, command palette, alert,
    popover, menu, select, combobox, autocomplete, preview card, toast, tooltip). */
+/* Deep ink glass: darker than the scene behind it, so opening a popup feels like
+   sinking into it rather than lifting a lighter panel on top.
+   Follows Settings > Appearance > Glass opacity (+12% so it stays deep). */
 [data-slot$="-popup"] {{
-  /* Follows Settings > Appearance > Glass opacity */
-  background-color: color-mix(in srgb, #0e0e11 var(--glass-opacity, 78%), transparent) !important;
+  background-color: color-mix(in srgb, {INK} min(100%, calc(var(--glass-opacity, 80%) + 12%)), transparent) !important;
   background-image: none !important;
-  backdrop-filter: blur(22px) saturate(115%) !important;
-  border-color: {rgba(CREAM, 0.09)} !important;
-  box-shadow: inset 0 1px 0 {rgba(CREAM, 0.05)}, 0 24px 70px rgba(0, 0, 0, 0.55) !important;
+  backdrop-filter: blur(24px) saturate(105%) !important;
+  border-color: {rgba(CREAM, 0.08)} !important;
+  box-shadow:
+    inset 0 1px 0 {rgba(CREAM, 0.06)},
+    0 0 0 1px rgba(0, 0, 0, 0.6),
+    0 30px 90px rgba(0, 0, 0, 0.7) !important;
 }}
 
-/* Small popups usually sit over text: a touch more solid */
+/* Small popups usually sit over text: nearly solid */
 [data-slot="popover-popup"],
 [data-slot="menu-popup"],
 [data-slot="select-popup"],
@@ -383,43 +390,45 @@ CSS = f"""/* Soft Bloom v7 - one dithered scene behind the whole window; sidebar
 [data-slot="autocomplete-popup"],
 [data-slot="preview-card-popup"],
 [data-slot="toast-popup"] {{
-  background-color: color-mix(in srgb, #0e0e11 min(100%, calc(var(--glass-opacity, 80%) + 8%)), transparent) !important;
+  background-color: color-mix(in srgb, {INK} min(100%, calc(var(--glass-opacity, 80%) + 14%)), transparent) !important;
 }}
 
 [data-slot="tooltip-popup"] {{
-  background-color: rgba(24, 24, 28, 0.94) !important;
+  background-color: rgba(10, 10, 12, 0.96) !important;
   backdrop-filter: blur(10px) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 10px 28px rgba(0, 0, 0, 0.6) !important;
 }}
 
 /* Dim layers behind modals (the popover click-catcher stays invisible) */
 [data-slot$="-backdrop"]:not([data-slot="popover-backdrop"]) {{
-  background-color: rgba(0, 0, 0, 0.45) !important;
-  backdrop-filter: blur(3px) !important;
+  background-color: rgba(2, 2, 3, 0.62) !important;
+  backdrop-filter: blur(4px) !important;
 }}
 
-/* Inside big modals (Settings, Usage, command palette, sheets): inner layers become
-   glass over the glass, with soft cream-tinted cards and hairline edges. */
+/* Inside big modals (Settings, Usage, command palette, sheets): quiet glass-over-glass.
+   Cream reads as a soft edge, not a fill. */
 [data-slot="dialog-popup"],
 [data-slot="sheet-popup"],
 [data-slot="alert-dialog-popup"],
 [data-slot="command-dialog-popup"] {{
   /* Solid on purpose: switch knobs and select triggers paint with --background. */
-  --background: #0e0e11;
+  --background: {INK_SOLID};
   --sidebar: transparent;
-  --card: {rgba(CREAM, 0.07)};
-  --sidebar-row-hover: {rgba(CREAM, 0.045)};
-  --sidebar-row-active: {rgba(CREAM, 0.08)};
-  --sidebar-row-selected: {rgba(CREAM, 0.07)};
+  --card: {rgba(CREAM, 0.045)};
+  --sidebar-row-hover: {rgba(CREAM, 0.035)};
+  --sidebar-row-active: {rgba(CREAM, 0.06)};
+  --sidebar-row-selected: {rgba(CREAM, 0.055)};
 }}
 
+/* Settings nav: a shade deeper than the content, like the app sidebar */
 [data-slot="dialog-popup"] nav {{
-  background-color: transparent !important;
-  border-right: 1px solid {rgba(CREAM, 0.06)};
+  background-color: rgba(0, 0, 0, 0.22) !important;
+  border-right: 1px solid {rgba(CREAM, 0.05)};
 }}
 
 [data-slot="dialog-popup"] [data-slot="settings-group"] {{
-  border: 1px solid {rgba(CREAM, 0.06)};
+  border: 1px solid {rgba(CREAM, 0.055)};
+  box-shadow: inset 0 1px 0 {rgba(CREAM, 0.03)};
 }}
 
 /* ---------- Sidebar ---------- */
