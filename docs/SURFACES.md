@@ -1,11 +1,11 @@
-# Surface audit (v8)
+# Surface audit (v9)
 
 Every surface checked, how it was checked, and what's known. "Live" means it was verified in a running T3 Code `0.1.10-nightly.20261116` web client at 1707×960, or in the desktop app where it says so.
 
 | Surface | How it's themed | Verified | Notes |
 |---|---|---|---|
 | Window background (scene) | `sidebar-wrapper` + `::before` / `::after` | Live | Static. The star sits in the bottom-right gutter. |
-| Sidebar | frosted glass, 50% / blur 14px | Live + desktop | Selected row uses T3's neutral `sidebarRowSelected`; no accent edge (removed in v4 at the user's request). |
+| Sidebar | frosted glass, 50% / blur 14px | Live + desktop | Selected row: the highlight fades out after the click (v9); hover still highlights; no accent edge. Fade curve checked by stepping the animation by hand (preview tabs don't play animations). |
 | Chat header | glass bar, 72% / blur 8px | Live | |
 | Conversation (messages) | transparent; art masked under the column | Live + desktop | Assistant text has a soft text-shadow. |
 | User message bubbles | 92% solid, cream hairline, hover edge | Live | No blur (performance). |

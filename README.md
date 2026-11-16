@@ -6,12 +6,16 @@ The theme is one JSON file. A Python script generates it, and T3 Code's `t3 them
 
 | | |
 |---|---|
-| Current version | **v8** (`themes/soft-bloom.json`) |
+| Current version | **v9** (`themes/soft-bloom.json`) |
 | Built against | T3 Code `0.1.10-nightly.20261116` |
 | Needs | A T3 Code build with **theme CSS** support (nightly as of Nov 2026). Stable `0.1.9` only applies the colours. See [Compatibility](#compatibility). |
 | Appearance | Dark only |
 
 ## Install
+
+**Easiest:** in T3 Code open **Settings → Appearance → Add theme**, then drop `themes/soft-bloom.json` into the dialog (or paste its contents). The CSS comes along with the colours.
+
+**Or from a terminal:**
 
 ```powershell
 t3 theme set themes/soft-bloom.json
@@ -63,4 +67,5 @@ More detail:
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md): how the layers, tokens and glass fit together, every selector the theme relies on, and why each choice was made.
 - [`docs/SURFACES.md`](docs/SURFACES.md): every surface, whether it was tested, and its known issues.
 - [`docs/MAINTAINING.md`](docs/MAINTAINING.md): what to check when T3 Code updates, especially when theme CSS reaches the stable release.
-- [`docs/CHANGELOG.md`](docs/CHANGELOG.md): v1 → v7 and what each version fixed.
+- [`docs/CHANGELOG.md`](docs/CHANGELOG.md): every version and what it fixed.
+- [`docs/ROADMAP.md`](docs/ROADMAP.md): research findings and the plan for a community release.

@@ -156,7 +156,7 @@ def roles(p):
     }
 
 
-CSS = f"""/* Soft Bloom v8 - one dithered scene behind the whole window; sidebar and chat sit on top as glass. */
+CSS = f"""/* Soft Bloom v9 - one dithered scene behind the whole window; sidebar and chat sit on top as glass. */
 
 /* The scene lives on the root layout wrapper, so it spans sidebar + chat */
 [data-slot="sidebar-wrapper"] {{
@@ -436,6 +436,22 @@ CSS = f"""/* Soft Bloom v8 - one dithered scene behind the whole window; sidebar
   transition: background-color 0.2s ease;
 }}
 
+/* Selected thread: the highlight confirms the click, then dissolves, so a thread you
+   left open doesn't look "stuck" selected. Hover still gives normal feedback.
+   One-shot animation per selection: nothing runs while idle. */
+[data-sidebar-row][aria-current="page"] {{
+  animation: sb-select-fade 2.4s ease-out forwards;
+}}
+
+[data-sidebar-row][aria-current="page"]:hover {{
+  background-color: {rgba(CREAM, 0.04)} !important;
+}}
+
+@keyframes sb-select-fade {{
+  0%, 30% {{ background-color: {rgba(CREAM, 0.07)}; }}
+  100%    {{ background-color: transparent; }}
+}}
+
 /* ---------- Small interactions ---------- */
 [data-slot="button"] {{
   transition: transform 0.12s ease, background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
@@ -460,6 +476,11 @@ CSS = f"""/* Soft Bloom v8 - one dithered scene behind the whole window; sidebar
 @media (prefers-reduced-motion: reduce) {{
   [data-chat-composer-form] button[type="submit"] {{
     animation: none !important;
+  }}
+  /* No fade: the selected thread simply has no persistent box */
+  [data-sidebar-row][aria-current="page"] {{
+    animation: none !important;
+    background-color: transparent !important;
   }}
   [data-slot="button"],
   [data-sidebar-row],

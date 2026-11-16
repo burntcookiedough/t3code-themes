@@ -1,6 +1,9 @@
 # Changelog
 
-## v8 (current)
+## v9 (current)
+- The selected sidebar thread no longer keeps a box: the highlight confirms the click, then fades away over about 2.4 seconds. Hovering it still highlights. With reduce motion there's no box at all.
+
+## v8
 - Settings, Usage and every other popup are now **darker than the main screen** instead of lighter. They use a deep ink tint (`#060607`, Glass opacity + 12%; small popups + 14%), a darker dim layer behind modals (62%), a deeper shadow with a thin top highlight, a darker Settings nav, and quieter cards and selected rows.
 - Fix: the publish scripts fall back to `~/.t3/bin/t3.cmd` when `t3` isn't on PATH.
 
