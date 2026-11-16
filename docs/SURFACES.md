@@ -22,11 +22,11 @@ Every surface checked, how it was checked, and what's known. "Live" means it was
 | Settings → Appearance | same | Live | |
 | Settings → Providers | same | Live | |
 | Other Settings pages | same building blocks (`settings-group`, switch, select-trigger, input) | Not individually opened | Expected to match. Send a screenshot if one doesn't. |
-| Popovers (model picker) | shared popup glass, follows Glass opacity + 8% | Live | |
+| Popovers (model picker) | deep ink glass, follows Glass opacity + 14% | Live | |
 | Menus, select, combobox, autocomplete, preview card | shared popup glass | Computed-style probe | Same rule as popovers. |
 | Command palette | shared popup glass | Not opened | The shortcut couldn't be triggered in the preview. |
 | Toasts | shared popup glass | Not seen | No toast fired during testing. |
-| Tooltips | 94% solid, small shadow | Rule only | |
+| Tooltips | 96% solid, small shadow | Rule only | |
 | Modal dim layers | near-black 62% + 4px blur | Live (v8) | The popover click-catcher stays invisible. |
 | Right panel (browser / terminal / files / diff) | 90% deep tint, hairline, no blur | Live | Blur removed in v7 because opening the panel lagged. |
 | Terminal drawer | top hairline; terminal colours from roles | Rule only | The terminal canvas keeps an opaque background for legibility. |
