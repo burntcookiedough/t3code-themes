@@ -72,3 +72,4 @@ More detail:
 - [`docs/DESIGN-SPEC.md`](docs/DESIGN-SPEC.md): the design rules (palette, layering, states, motion, art) every change should follow.
 - [`docs/STABILITY-AUDIT.md`](docs/STABILITY-AUDIT.md): which parts rely on T3's stable contract and which on internals, and what happens if they change.
 - [`docs/SURFACE-MAP.md`](docs/SURFACE-MAP.md): every T3 surface, generated from T3's source by `tools/surface_map.py`. Re-run it on each T3 update.
+- [`docs/UPSTREAM.md`](docs/UPSTREAM.md): T3's contribution rules, the theme bugs we checked, and the draft Ideas post.
