@@ -1,6 +1,9 @@
 # Changelog
 
-## v9 (current)
+## v10 (current)
+- The sidebar's "Working" status (label and spinner) uses a soft moonlight grey-blue (`#b9c3d6`, via `--info-foreground`) instead of T3's bright blue, so it matches the palette.
+
+## v9
 - The selected sidebar thread no longer keeps a box: the highlight confirms the click, then fades away over about 2.4 seconds. Hovering it still highlights. With reduce motion there's no box at all.
 
 ## v8

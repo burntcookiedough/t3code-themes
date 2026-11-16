@@ -156,7 +156,7 @@ def roles(p):
     }
 
 
-CSS = f"""/* Soft Bloom v9 - one dithered scene behind the whole window; sidebar and chat sit on top as glass. */
+CSS = f"""/* Soft Bloom v10 - one dithered scene behind the whole window; sidebar and chat sit on top as glass. */
 
 /* The scene lives on the root layout wrapper, so it spans sidebar + chat */
 [data-slot="sidebar-wrapper"] {{
@@ -224,6 +224,8 @@ CSS = f"""/* Soft Bloom v9 - one dithered scene behind the whole window; sidebar
   --toolbar-control-hover: {rgba(CREAM, 0.085)} !important;
   --sidebar-border: {rgba(CREAM, 0.06)} !important;
   --surface-grain: none !important;
+  /* Status "info" (e.g. the sidebar's Working spinner): soft moonlight instead of loud blue */
+  --info-foreground: #b9c3d6 !important;
 }}
 
 /* Clear every opaque layer between the scene and the content */

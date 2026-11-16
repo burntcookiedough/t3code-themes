@@ -60,6 +60,7 @@ T3 builds almost every surface from about 15 CSS variables. Overriding them is w
 | `--app-chrome-background`, `--toolbar-background` | `rgba(6,6,7,.55)` | desktop titlebar and toolbars |
 | `--toolbar-*`, `--sidebar-border` | cream 5–8.5% | toolbar controls, sidebar edge |
 | `--surface-grain` | `none` | turns off T3's own grain; the scene has its own |
+| `--info-foreground` | `#b9c3d6` | "info" status such as the sidebar's Working spinner: soft moonlight instead of bright blue |
 
 `--background` is deliberately **not** made transparent globally. T3 uses it both as a page surface and as the fill for small controls (switch knobs, select triggers). So the theme clears specific page layers instead. Inside modals it's set to solid `#0e0e11` (see the v7 fix in the changelog).
 

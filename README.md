@@ -6,7 +6,7 @@ The theme is one JSON file. A Python script generates it, and T3 Code's `t3 them
 
 | | |
 |---|---|
-| Current version | **v9** (`themes/soft-bloom.json`) |
+| Current version | **v10** (`themes/soft-bloom.json`) |
 | Built against | T3 Code `0.1.10-nightly.20261116` |
 | Needs | A T3 Code build with **theme CSS** support (nightly as of Nov 2026). Stable `0.1.9` only applies the colours. See [Compatibility](#compatibility). |
 | Appearance | Dark only |
