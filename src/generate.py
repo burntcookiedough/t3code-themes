@@ -129,7 +129,7 @@ def stipple_grain(op):
 
 
 def roles(p):
-    return {
+    base = {
         "canvas": p["base"], "chrome": p["deep"], "toolbar": p["deep"],
         "toolbarForeground": p["text"], "toolbarBorder": p["line"],
         "toolbarControl": p["raised"], "toolbarControlForeground": p["text"], "toolbarControlHover": p["hover"],
@@ -154,9 +154,29 @@ def roles(p):
         "terminalBackground": p["deep"], "terminalForeground": p["text"], "terminalCursor": p["accent"],
         "terminalSelection": p["input"], "terminalScrollbar": p["input"], "terminalScrollbarHover": p["faint"],
     }
+    # Translucent "glass" values. T3 maps each role to the CSS token in brackets, for the
+    # app and for the sidebar scope, so no CSS is needed (and stable-without-CSS gets them too).
+    base.update({
+        "border": rgba(CREAM, 0.075),             # --border
+        "input": rgba(CREAM, 0.12),               # --input
+        "accentSurface": rgba(CREAM, 0.065),      # --accent (hover fills)
+        "muted": rgba(CREAM, 0.05),               # --muted
+        "secondary": rgba(CREAM, 0.055),          # --secondary
+        "surfaceRaised": rgba(CREAM, 0.055),      # --surface-raised
+        "surface": "rgba(22, 22, 26, 0.55)",      # --card
+        "surfaceOverlay": "rgba(16, 16, 19, 0.86)",  # --popover
+        "codeBackground": "rgba(6, 6, 7, 0.72)",  # --code-background
+        "chrome": "rgba(6, 6, 7, 0.55)",          # --app-chrome-background
+        "toolbar": "rgba(6, 6, 7, 0.55)",         # --toolbar-background
+        "toolbarBorder": rgba(CREAM, 0.06),       # --toolbar-border
+        "toolbarControl": rgba(CREAM, 0.05),      # --toolbar-control
+        "toolbarControlHover": rgba(CREAM, 0.085),  # --toolbar-control-hover
+        "sidebarBorder": rgba(CREAM, 0.06),       # --sidebar-border
+    })
+    return base
 
 
-CSS = f"""/* Soft Bloom v10 - one dithered scene behind the whole window; sidebar and chat sit on top as glass. */
+CSS = f"""/* Soft Bloom v11 - one dithered scene behind the whole window; sidebar and chat sit on top as glass. */
 
 /* The scene lives on the root layout wrapper, so it spans sidebar + chat */
 [data-slot="sidebar-wrapper"] {{
@@ -203,28 +223,11 @@ CSS = f"""/* Soft Bloom v10 - one dithered scene behind the whole window; sideba
           mask-image: linear-gradient(270deg, #000 0%, #000 7%, rgba(0, 0, 0, 0.22) 22%, rgba(0, 0, 0, 0.22) 100%);
 }}
 
-/* ---------- Design tokens ----------
-   T3 builds every surface from these tokens, so setting them here restyles
-   screens and panels I never touch directly. Re-declared on [data-app-sidebar]
-   because T3 redefines its tokens there. */
-:root, [data-app-sidebar] {{
-  --border: {rgba(CREAM, 0.075)} !important;
-  --input: {rgba(CREAM, 0.12)} !important;
-  --accent: {rgba(CREAM, 0.065)} !important;
-  --muted: {rgba(CREAM, 0.05)} !important;
-  --secondary: {rgba(CREAM, 0.055)} !important;
-  --surface-raised: {rgba(CREAM, 0.055)} !important;
-  --card: rgba(22, 22, 26, 0.55) !important;
-  --popover: rgba(16, 16, 19, 0.86) !important;
-  --code-background: rgba(6, 6, 7, 0.72) !important;
-  --app-chrome-background: rgba(6, 6, 7, 0.55) !important;
-  --toolbar-background: rgba(6, 6, 7, 0.55) !important;
-  --toolbar-border: {rgba(CREAM, 0.06)} !important;
-  --toolbar-control: {rgba(CREAM, 0.05)} !important;
-  --toolbar-control-hover: {rgba(CREAM, 0.085)} !important;
-  --sidebar-border: {rgba(CREAM, 0.06)} !important;
+/* ---------- Tokens without a colour role ----------
+   Everything else lives in the theme's colour roles (see roles() in this file). */
+:root {{
   --surface-grain: none !important;
-  /* Status "info" (e.g. the sidebar's Working spinner): soft moonlight instead of loud blue */
+  /* T3 keeps "info" fixed on purpose; this only softens the Working spinner's blue. */
   --info-foreground: #b9c3d6 !important;
 }}
 
@@ -434,18 +437,18 @@ CSS = f"""/* Soft Bloom v10 - one dithered scene behind the whole window; sideba
 }}
 
 /* ---------- Sidebar ---------- */
-[data-sidebar-row] {{
+[data-thread-item] [role="button"] {{
   transition: background-color 0.2s ease;
 }}
 
 /* Selected thread: the highlight confirms the click, then dissolves, so a thread you
    left open doesn't look "stuck" selected. Hover still gives normal feedback.
    One-shot animation per selection: nothing runs while idle. */
-[data-sidebar-row][aria-current="page"] {{
+[data-thread-item] [aria-current="page"] {{
   animation: sb-select-fade 2.4s ease-out forwards;
 }}
 
-[data-sidebar-row][aria-current="page"]:hover {{
+[data-thread-item] [aria-current="page"]:hover {{
   background-color: {rgba(CREAM, 0.04)} !important;
 }}
 
@@ -480,12 +483,12 @@ CSS = f"""/* Soft Bloom v10 - one dithered scene behind the whole window; sideba
     animation: none !important;
   }}
   /* No fade: the selected thread simply has no persistent box */
-  [data-sidebar-row][aria-current="page"] {{
+  [data-thread-item] [aria-current="page"] {{
     animation: none !important;
     background-color: transparent !important;
   }}
   [data-slot="button"],
-  [data-sidebar-row],
+  [data-thread-item] [role="button"],
   [data-slot="composer-host"] {{
     transition: none !important;
   }}
