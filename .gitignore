@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*-bloom.svg
+# Screenshots of the live app can contain thread titles, emails and repo names.
+screens/
+*.png
