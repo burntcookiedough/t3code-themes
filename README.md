@@ -69,3 +69,6 @@ More detail:
 - [`docs/MAINTAINING.md`](docs/MAINTAINING.md): what to check when T3 Code updates, especially when theme CSS reaches the stable release.
 - [`docs/CHANGELOG.md`](docs/CHANGELOG.md): every version and what it fixed.
 - [`docs/ROADMAP.md`](docs/ROADMAP.md): research findings and the plan for a community release.
+- [`docs/DESIGN-SPEC.md`](docs/DESIGN-SPEC.md): the design rules (palette, layering, states, motion, art) every change should follow.
+- [`docs/STABILITY-AUDIT.md`](docs/STABILITY-AUDIT.md): which parts rely on T3's stable contract and which on internals, and what happens if they change.
+- [`docs/SURFACE-MAP.md`](docs/SURFACE-MAP.md): every T3 surface, generated from T3's source by `tools/surface_map.py`. Re-run it on each T3 update.
