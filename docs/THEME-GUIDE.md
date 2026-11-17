@@ -180,22 +180,22 @@ For a repeatable performance comparison, export the baseline theme files outside
   "origin": "http://127.0.0.1:3799",
   "token": "<single-use sandbox token>",
   "thread": "/<environmentId>/<threadId>",
-  "profileDir": "E:/Temp/theme-perf-profile",
+  "profileDir": ".perf-profile",
   "port": 9337,
-  "outDir": "E:/Temp/theme-perf",
+  "outDir": "perf-results",
   "repeats": 1,
   "cycles": 2,
   "settleMs": 900,
   "animationMs": 0,
   "warmup": false,
   "runs": [
-    { "label": "baseline", "themeFiles": ["E:/Temp/baseline/themes/soft-bloom.json"] },
+    { "label": "baseline", "themeFiles": ["../baseline-themes/soft-bloom.json"] },
     { "label": "release", "themeFiles": ["themes/soft-bloom.json"] }
   ]
 }
 ```
 
-Use matching theme IDs in each run. Each sample includes `cycles` open/close pairs at 1707×960. The example matches the supplied reference experiment's first toggles and T3's default instant panes. For a warmed animation stress test use `animationMs: 200`, `warmup: true`, `repeats: 3`, `cycles: 1`. The tool sets the duration only in this throwaway browser's client settings and refuses to trace when the animation state differs or reduced motion is active. It checks imported CSS against the file and records the theme, animation state and scene-layer hint. Raster, paint, layout and layer durations are milliseconds summed over trace events; `tracedWork` is the inclusive sum of all duration events and **contains overlaps**, so it is neither elapsed time nor CPU time. First-open panel measurements can include lazy module and highlighter work. Compare like-for-like samples on an otherwise idle machine, retain raw samples, and inspect medians for noise. Use a unique port and profile for every Chrome run. Do not run captures concurrently with performance measurements.
+Use matching theme IDs in each run. Each sample includes `cycles` open/close pairs at 1707×960. For a warmed animation stress test use `animationMs: 200`, `warmup: true`, `repeats: 3`, `cycles: 1`. The tool sets the duration only in this throwaway browser's client settings and refuses to trace when the animation state differs or reduced motion is active. It checks imported CSS against the file and records the theme, animation state and scene-layer hint. Raster, paint, layout and layer durations are milliseconds summed over trace events; `tracedWork` is the inclusive sum of all duration events and **contains overlaps**, so it is neither elapsed time nor CPU time. First-open panel measurements can include lazy module and highlighter work. Compare like-for-like samples on an otherwise idle machine, retain raw samples, and inspect medians for noise. Use a unique port and profile for every Chrome run. Do not run captures concurrently with performance measurements.
 
 ## 11. Pitfalls we hit (so you don't)
 

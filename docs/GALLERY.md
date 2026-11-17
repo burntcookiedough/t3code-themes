@@ -1,6 +1,6 @@
 # Gallery
 
-Every theme on four screens: a conversation, a new thread, the model picker and Settings. All screenshots were taken in a sandbox T3 Code with demo content.
+Every theme on five screens: a conversation, a new thread, the model picker, Settings and the Files panel. All screenshots were taken in a sandbox T3 Code with demo content.
 
 ## Soft Bloom
 <a id="soft-bloom"></a>

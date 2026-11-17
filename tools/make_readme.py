@@ -120,7 +120,7 @@ Soft Bloom, the tools and the docs are [MIT](LICENSE). The twenty scene themes a
 
     # The gallery page: every captured screen of every theme.
     order = soft + dark + light
-    parts = ["# Gallery\n\nEvery theme on four screens: a conversation, a new thread, the model picker and Settings. "
+    parts = ["# Gallery\n\nEvery theme on five screens: a conversation, a new thread, the model picker, Settings and the Files panel. "
              "All screenshots were taken in a sandbox T3 Code with demo content.\n"]
     for t in order:
         tid = t["id"]

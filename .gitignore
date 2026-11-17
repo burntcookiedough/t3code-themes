@@ -6,3 +6,5 @@ build/
 screens/
 .capture-profile/
 *.png
+perf-results/
+.perf-profile/
