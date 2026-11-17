@@ -8,7 +8,7 @@ From T3 Code's public source (`pingdotgg/t3code`) and the installed `0.1.10-nigh
 
 - **How people will install it.** Settings → Appearance → **Add theme** accepts a dropped or pasted `.json` (T3 or VS Code format) and **keeps our CSS** (`ThemeImportDialog.tsx`). `t3 theme set <file>` works too. Both share the same file, so one asset serves everyone.
 - **Size limits differ by install path:**
-  - `t3 theme set <file>` rejects files over **32 KB**. Ours is about 23 KB, so there's roughly 9 KB of headroom.
+  - `t3 theme set <file>` was thought to reject files over **32 KB**. On `0.1.10-nightly.20261116` it accepted 51 KB files (checked 2026-11-17 with the theme-examples ports). Ours is about 23 KB.
   - Add theme accepts up to 256 KB.
   - CSS over T3's CSS limit (50,000 characters) is **silently dropped** on import, leaving only the colours, with no error shown.
 - **Export exists** ("Export theme file"), so users can re-share. There's also a theme *collection* concept (`collection: { id, label }`) used to group variants.
@@ -34,7 +34,7 @@ From T3 Code's public source (`pingdotgg/t3code`) and the installed `0.1.10-nigh
 2. **CI on every push** (GitHub Actions):
    - the JSON matches T3's required fields
    - CSS is under 50,000 characters
-   - the JSON file is under 32 KB
+   - the JSON file is under 256 KB (Add theme's limit)
    - regenerating from `src/generate.py` reproduces the committed file
    - colour-role contrast stays at or above 4.5:1
 3. **Fallbacks for unstable hooks:**
