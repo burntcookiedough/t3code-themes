@@ -62,6 +62,10 @@ How Soft Bloom interacts with T3 Code's own settings. Everything here was checke
 | **Sidebar collapsed / floating / Labs "boring sidebar"** | All use `[data-slot="sidebar-inner"]`, which the theme styles. *(Only the default sidebar was visually tested.)* |
 | **Mobile app** | T3 doesn't apply themes on mobile. |
 
+## Also in this repo
+
+[`ports/claude-scenes/`](ports/claude-scenes/README.md) holds the twenty scenes from Anthropic's Apache-2.0 theme-examples plugin, ported to T3 Code themes with Soft Bloom's glass. Fourteen are dark and six are light.
+
 More detail:
 
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md): how the layers, tokens and glass fit together, every selector the theme relies on, and why each choice was made.

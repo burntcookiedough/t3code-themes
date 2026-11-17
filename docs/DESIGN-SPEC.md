@@ -81,7 +81,7 @@ Opening something should feel like **sinking into it**, never like lifting a lig
 
 - No `:has()` on large or root containers.
 - At most three live blurs on screen at once while idle (sidebar, chat bar, header). Popups add one while they're open.
-- CSS under 50,000 characters; the whole file under 32 KB.
+- CSS under 50,000 characters; the whole file well under Add theme's 256 KB (v11 is about 22.6 KB).
 
 ## Accessibility
 

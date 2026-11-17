@@ -1,0 +1,23 @@
+T3 Code ports of the theme-examples scenes
+
+This directory contains a copy of part of the "theme-examples" plugin by Anthropic,
+from https://github.com/anthropics/claude-plugins-official (plugins/theme-examples,
+commit c4a79ce6b7c21a4b2ea908767f4adeab32695ae4, plugin version 0.4.3), licensed under
+the Apache License, Version 2.0. The full license text is in
+vendor/theme-examples/LICENSE.
+
+The files under vendor/theme-examples/ are unmodified copies.
+
+The themes in themes/ are derived from those scenes. Changes made:
+  - Each scene is used as its own reduced-motion still: the scene's
+    `@media (prefers-reduced-motion: reduce)` rules are applied unconditionally,
+    and the animation code is removed.
+  - The resulting SVG is rewritten to be smaller without changing what it draws
+    (scenemin.py; checked pixel by pixel against the still in Chrome by verify.py).
+  - The SVG is embedded in CSS for T3 Code, together with original colour roles
+    and interface styling based on Soft Bloom (this repository). Each theme's CSS
+    starts with a comment naming the source scene and the Apache License 2.0.
+  - The "ember" scene is published under the id "ember-glow" and the name
+    "Ember Glow", because T3 Code reserves the id "ember" for its built-in theme.
+
+These ports are not made, endorsed or supported by Anthropic.
