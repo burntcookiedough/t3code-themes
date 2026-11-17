@@ -1,6 +1,8 @@
 __pycache__/
 *.pyc
-*-bloom.svg
-# Screenshots of the live app can contain thread titles, emails and repo names.
+build/
+# Captures of a real T3 Code window can show thread titles, emails and repo names.
+# Gallery images are committed as .webp, made in a sandbox; anything else stays local.
 screens/
+.capture-profile/
 *.png

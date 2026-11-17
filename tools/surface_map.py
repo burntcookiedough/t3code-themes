@@ -135,7 +135,7 @@ def main():
             palette_hotspots.append((len(palette) + len(literal), rel.replace("\\", "/"), sorted(set(palette))[:6], len(literal)))
 
     def slot_covered(slot):
-        return slot in theme_slots or any(slot.endswith("-" + sfx) for sfx in theme_slot_suffixes)
+        return slot in theme_slots or any(slot.endswith(sfx) for sfx in theme_slot_suffixes)  # suffixes keep their hyphen: "-popup"
 
     out = []
     w = out.append
@@ -147,8 +147,7 @@ def main():
         sha = subprocess.run(["git", "-C", ROOT, "log", "-1", "--format=%h (%cs)"], capture_output=True, text=True).stdout.strip()
     except OSError:
         sha = ""
-    version = re.search(r"Soft Bloom (v\d+)", css)
-    w(f"T3 Code source: `pingdotgg/t3code` at `{sha or 'unknown'}`. Theme: Soft Bloom {version.group(1) if version else '(unknown version)'}.")
+    w(f"T3 Code source: `pingdotgg/t3code` at `{sha or 'unknown'}`. Theme checked for coverage: `{os.path.basename(THEME)}`.")
     w("")
     w(f"- Source files scanned: **{len(files)}** (`apps/web/src`, tests excluded)")
     w(f"- Surface areas: **{len(areas)}**")

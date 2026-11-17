@@ -1,0 +1,18 @@
+T3 Code Themes
+
+Soft Bloom, the tools and the documentation in this repository are MIT licensed
+(see LICENSE).
+
+The following themes are derived from the scenes of the "theme-examples" plugin
+by Anthropic (https://github.com/anthropics/claude-plugins-official, plugin
+version 0.4.3, commit c4a79ce6b7c21a4b2ea908767f4adeab32695ae4), licensed under
+the Apache License, Version 2.0 (source/theme-examples/vendor/theme-examples/LICENSE):
+
+  aurora, blueprint, braille-stars, deep-water, departure-board, dither-dunes,
+  dither-dunes-night, ember-glow, halftone-dawn, halftone-dusk, honu-lagoon,
+  koi-mosaic, night-reef, paper-garden, paper-garden-kraft, plotter-tide,
+  plotter-tide-night, snow-pines, teletext-clouds, vector-range
+
+What was changed is described in source/theme-examples/NOTICE. These themes are
+not made, endorsed or supported by Anthropic, and this repository is not
+affiliated with the T3 Code project.
