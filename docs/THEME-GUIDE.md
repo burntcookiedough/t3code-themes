@@ -152,6 +152,7 @@ Every theme in this repo is captured on these 15 surfaces by `tools/capture` (§
 
 | Tool | What it does |
 |---|---|
+| `tools/new_theme.py` | Makes a complete theme from `--base`, `--accent`, `--text` and optional `--art`, with the recipe in §6 and the checks in §9. The fastest correct start. |
 | `tools/capture/capture.mjs` | Drives T3 in headless Chrome: installs themes through the real Add theme dialog, opens the 15 surfaces, screenshots each, and reports **off-palette colours** (backgrounds, borders, text far from every colour the theme defines). |
 | `tools/capture/sheet.py` | One contact sheet per theme from those screenshots. |
 | `tools/capture/perf.mjs` | Imports real theme files through Add theme and traces panel/sidebar open/close cycles. Alternates comparison runs per theme; writes raw samples, state and medians to `perf.json`. Supports optional animation and warm-up. No CSS injection. |
@@ -220,8 +221,10 @@ Use matching theme IDs in each run. Each sample includes `cycles` open/close pai
 
 ## 12. A workflow for agents
 
+The step-by-step versions (install, make, change, verify) are the playbooks in [AGENTS.md](../AGENTS.md). In short:
+
 1. Read this file, then `docs/SURFACE-MAP.md` for the current T3 layout.
-2. Copy the closest theme from `themes/` (Soft Bloom for an original scene; a scene port for a light theme), or start from a generator in `source/`.
+2. Start with `tools/new_theme.py` (it already follows §6 and §9). For something it can't express, copy the closest generator in `source/`.
 3. Set the colour roles first; check §9 contrast targets in code.
 4. Add CSS only for what roles can't do; follow §6.
 5. Keep the CSS under 50,000 characters; check for `\`.

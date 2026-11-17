@@ -1,0 +1,191 @@
+[
+  {
+    "id": "soft-bloom",
+    "name": "Soft Bloom",
+    "appearance": "dark",
+    "description": "Very dark and dreamy: a dithered star glow and pixel sparkles behind frosted glass, with cream accents.",
+    "file": "themes/soft-bloom.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/soft-bloom.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/soft-bloom.webp"
+  },
+  {
+    "id": "aurora",
+    "name": "Aurora",
+    "appearance": "dark",
+    "description": "Green and violet northern lights over a dark ridge.",
+    "file": "themes/aurora.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/aurora.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/aurora.webp"
+  },
+  {
+    "id": "blueprint",
+    "name": "Blueprint",
+    "appearance": "dark",
+    "description": "A cyanotype sheet with a plotted comet orbit in the corner.",
+    "file": "themes/blueprint.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/blueprint.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/blueprint.webp"
+  },
+  {
+    "id": "braille-stars",
+    "name": "Braille Stars",
+    "appearance": "dark",
+    "description": "A night sky and a Milky Way drawn in braille dots.",
+    "file": "themes/braille-stars.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/braille-stars.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/braille-stars.webp"
+  },
+  {
+    "id": "deep-water",
+    "name": "Deep Water",
+    "appearance": "dark",
+    "description": "Light falling through deep teal water, a turtle's shadow below.",
+    "file": "themes/deep-water.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/deep-water.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/deep-water.webp"
+  },
+  {
+    "id": "departure-board",
+    "name": "Departure Board",
+    "appearance": "dark",
+    "description": "Amber LED letters on a dark board.",
+    "file": "themes/departure-board.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/departure-board.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/departure-board.webp"
+  },
+  {
+    "id": "dither-dunes-night",
+    "name": "Dither Dunes Night",
+    "appearance": "dark",
+    "description": "The same dunes after dark: pale dots on umber and an ember sun.",
+    "file": "themes/dither-dunes-night.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/dither-dunes-night.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/dither-dunes-night.webp"
+  },
+  {
+    "id": "ember-glow",
+    "name": "Ember Glow",
+    "appearance": "dark",
+    "description": "A warm red glow rising from the corners of a dark room.",
+    "file": "themes/ember-glow.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/ember-glow.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/ember-glow.webp"
+  },
+  {
+    "id": "halftone-dusk",
+    "name": "Halftone Dusk",
+    "appearance": "dark",
+    "description": "The riso sunrise on night-blue paper: an ember sun in dots.",
+    "file": "themes/halftone-dusk.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/halftone-dusk.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/halftone-dusk.webp"
+  },
+  {
+    "id": "night-reef",
+    "name": "Night Reef",
+    "appearance": "dark",
+    "description": "A night reef with a glowing tile turtle and ray.",
+    "file": "themes/night-reef.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/night-reef.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/night-reef.webp"
+  },
+  {
+    "id": "paper-garden-kraft",
+    "name": "Paper Garden, Kraft",
+    "appearance": "dark",
+    "description": "Cut-paper leaves on dark kraft paper, one coral bloom.",
+    "file": "themes/paper-garden-kraft.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/paper-garden-kraft.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/paper-garden-kraft.webp"
+  },
+  {
+    "id": "plotter-tide-night",
+    "name": "Plotter Tide, Night",
+    "appearance": "dark",
+    "description": "The plotter's tide chart in pale ink on blue-black paper.",
+    "file": "themes/plotter-tide-night.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/plotter-tide-night.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/plotter-tide-night.webp"
+  },
+  {
+    "id": "snow-pines",
+    "name": "Snow Pines",
+    "appearance": "dark",
+    "description": "An ASCII pine forest at dusk under falling snow.",
+    "file": "themes/snow-pines.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/snow-pines.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/snow-pines.webp"
+  },
+  {
+    "id": "teletext-clouds",
+    "name": "Block Clouds",
+    "appearance": "dark",
+    "description": "Night clouds and a crescent moon built from teletext blocks.",
+    "file": "themes/teletext-clouds.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/teletext-clouds.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/teletext-clouds.webp"
+  },
+  {
+    "id": "vector-range",
+    "name": "Vector Range",
+    "appearance": "dark",
+    "description": "Phosphor-green wireframe mountains on black.",
+    "file": "themes/vector-range.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/vector-range.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/vector-range.webp"
+  },
+  {
+    "id": "dither-dunes",
+    "name": "Dither Dunes",
+    "appearance": "light",
+    "description": "One-bit dunes in sand-coloured dots under a terracotta sun.",
+    "file": "themes/dither-dunes.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/dither-dunes.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/dither-dunes.webp"
+  },
+  {
+    "id": "halftone-dawn",
+    "name": "Halftone Dawn",
+    "appearance": "light",
+    "description": "A two-ink riso sunrise in halftone dots on cream paper.",
+    "file": "themes/halftone-dawn.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/halftone-dawn.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/halftone-dawn.webp"
+  },
+  {
+    "id": "honu-lagoon",
+    "name": "Honu Lagoon",
+    "appearance": "light",
+    "description": "A lagoon from above in ASCII tiles, with a coral-pink turtle.",
+    "file": "themes/honu-lagoon.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/honu-lagoon.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/honu-lagoon.webp"
+  },
+  {
+    "id": "koi-mosaic",
+    "name": "Koi Mosaic",
+    "appearance": "light",
+    "description": "A tiled koi pond from above: two koi and lily pads.",
+    "file": "themes/koi-mosaic.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/koi-mosaic.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/koi-mosaic.webp"
+  },
+  {
+    "id": "paper-garden",
+    "name": "Paper Garden",
+    "appearance": "light",
+    "description": "Cut-paper leaves at the edges of a warm white sheet, one coral bloom.",
+    "file": "themes/paper-garden.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/paper-garden.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/paper-garden.webp"
+  },
+  {
+    "id": "plotter-tide",
+    "name": "Plotter Tide",
+    "appearance": "light",
+    "description": "Pen-plotter tide lines on warm paper.",
+    "file": "themes/plotter-tide.json",
+    "download": "https://github.com/burntcookiedough/t3code-themes/releases/latest/download/plotter-tide.json",
+    "screenshot": "https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/screenshots/plotter-tide.webp"
+  }
+]

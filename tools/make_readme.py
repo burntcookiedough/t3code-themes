@@ -1,4 +1,4 @@
-"""Writes README.md: install steps and a gallery of every theme in themes/, with screenshots and downloads.
+"""Writes README.md, docs/GALLERY.md and themes.json (a list of every theme for agents) from themes/*.json.
 
     python tools/make_readme.py
 """
@@ -81,6 +81,30 @@ Or from a terminal: `t3 theme set path/to/theme.json`.
 
 **Light themes** show when **Color scheme** is Light, or System on a light computer. Dark themes show when it's Dark or System on a dark computer. Paired themes (Halftone Dawn and Halftone Dusk, for example) work well as your light and dark choice with Color scheme set to System.
 
+## Let your coding agent do it
+
+Paste one of these into Claude Code, Codex or any agent inside T3 Code. Both point the agent at [AGENTS.md](AGENTS.md), which has step-by-step playbooks.
+
+**Install themes:**
+
+```text
+Install T3 Code themes for me from https://github.com/burntcookiedough/t3code-themes.
+Read https://raw.githubusercontent.com/burntcookiedough/t3code-themes/main/AGENTS.md and follow
+"Playbook 1: install themes" from start to finish.
+The themes I want: <names from the gallery, a description of the look I like, or "all of them">.
+When you're done, tell me which theme is showing and how to switch between them.
+```
+
+**Make your own theme:**
+
+```text
+Make me a custom T3 Code theme. Clone https://github.com/burntcookiedough/t3code-themes and follow
+"Playbook 2: make a new theme" in its AGENTS.md from start to finish: agree on the look with me,
+generate it with tools/new_theme.py, fix anything its checks reject, install it, and tell me what to
+look at to judge it.
+The look I want: <dark or light, the colours and mood, and any picture to show behind the app>.
+```
+
 ## Soft Bloom
 
 {grid(soft, blurbs)}
@@ -100,7 +124,8 @@ Twenty scenes from Anthropic's [theme-examples](https://github.com/anthropics/cl
 Everything we learned building these is written down, so you or your coding agent can start without rediscovering it:
 
 - **[docs/THEME-GUIDE.md](docs/THEME-GUIDE.md)** covers the theme format, every colour role and what it paints, what theme CSS may contain, stable selectors, the glass recipe, the surfaces to check, performance rules and known pitfalls.
-- **[AGENTS.md](AGENTS.md)** is the starting point for coding agents, with a map of this repo.
+- **[AGENTS.md](AGENTS.md)** has playbooks for coding agents: install themes, make a new one, change one here, verify on every surface. `themes.json` lists every theme for them.
+- **[tools/new_theme.py](tools/new_theme.py)** makes a complete theme from a background, accent and text colour, plus optional art, with the same glass treatment and checks as these.
 - **[tools/capture](tools/capture/)** screenshots every surface of T3 under each theme and flags colours that don't belong.
 
 To regenerate the themes:
@@ -108,7 +133,7 @@ To regenerate the themes:
 ```sh
 python source/soft-bloom/generate.py themes/soft-bloom.json   # Soft Bloom
 python source/theme-examples/build.py                         # the 20 scenes (needs Node 22.6+)
-python tools/make_readme.py                                   # this README
+python tools/make_readme.py                                   # this README, the gallery, themes.json
 ```
 
 ## License
@@ -132,7 +157,15 @@ Soft Bloom, the tools and the docs are [MIT](LICENSE). The twenty scene themes a
                      f"<img src=\"../screenshots/{tid}.webp\" alt=\"{t['name']}: a conversation\">\n\n{shots}\n")
     with open(os.path.join(ROOT, "docs", "GALLERY.md"), "w", encoding="utf-8", newline="\n") as fh:
         fh.write("\n".join(parts))
-    print(f"README.md and docs/GALLERY.md: {len(themes)} themes")
+    # A machine-readable list for agents choosing and downloading themes.
+    raw = f"https://raw.githubusercontent.com/{REPO}/main"
+    index = [{"id": t["id"], "name": t["name"], "appearance": t["appearance"], "description": blurbs.get(t["id"], ""),
+              "file": f"themes/{t['id']}.json", "download": f"{DL}/{t['id']}.json",
+              "screenshot": f"{raw}/screenshots/{t['id']}.webp"} for t in order]
+    with open(os.path.join(ROOT, "themes.json"), "w", encoding="utf-8", newline="\n") as fh:
+        json.dump(index, fh, indent=2, ensure_ascii=False)
+        fh.write("\n")
+    print(f"README.md, docs/GALLERY.md and themes.json: {len(themes)} themes")
 
 
 if __name__ == "__main__":

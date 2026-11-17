@@ -17,7 +17,7 @@ THEMES_DIR = os.path.join(HERE, "..", "..", "themes")   # the repo's installable
 sys.path.insert(0, HERE)
 import scenemin  # noqa: E402
 
-CSS_LIMIT = 50_000          # T3: longer CSS is dropped on import, silently
+CSS_LIMIT = 50_000          # T3 refuses a theme file whose CSS is longer
 COLLECTION = {"id": "theme-examples-scenes", "label": "theme-examples scenes"}
 # T3 reserves its built-in theme ids and names; a scene that shares one gets its own.
 RENAMED = {"ember": ("ember-glow", "Ember Glow")}
@@ -356,7 +356,7 @@ def minify_css(css):
 VEIL_MARGIN = 0.03   # on top of what tune_veils.py measured
 
 
-def css_for(scene, p, scene_url, veil):
+def css_for(scene, p, scene_url, veil, credit=None):
     dark, e, a = p["dark"], p["edge"], p["accent"]
     # The sidebar's text sits on the art too: always frosted and mostly opaque, whatever the scene's
     # own glass (Plotter Tide's is unblurred, which let its contour lines run through thread titles).
@@ -395,11 +395,12 @@ def css_for(scene, p, scene_url, veil):
     )
     css = minify_css(TEMPLATE.format(**vals))
     assert "SCENE" in css
-    # The file travels on its own (Add theme, Export theme file), so the notice travels with it.
-    credit = (f"/* {scene['title']}: modified from the \"{scene['id']}\" scene of Anthropic's theme-examples plugin "
-              f"(github.com/anthropics/claude-plugins-official/tree/main/plugins/theme-examples), "
-              f"licensed under the Apache License 2.0 (apache.org/licenses/LICENSE-2.0). "
-              f"Made a still and restyled for T3 Code; not made or endorsed by Anthropic. */")
+    if credit is None:
+        # The file travels on its own (Add theme, Export theme file), so the notice travels with it.
+        credit = (f"/* {scene['title']}: modified from the \"{scene['id']}\" scene of Anthropic's theme-examples plugin "
+                  f"(github.com/anthropics/claude-plugins-official/tree/main/plugins/theme-examples), "
+                  f"licensed under the Apache License 2.0 (apache.org/licenses/LICENSE-2.0). "
+                  f"Made a still and restyled for T3 Code; not made or endorsed by Anthropic. */")
     return credit + css.replace("SCENE", scene_url)
 
 
