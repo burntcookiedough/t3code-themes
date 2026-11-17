@@ -102,6 +102,7 @@ T3 filters theme CSS (`packages/shared/src/themeCss.ts`), applies it as an adopt
 | `[data-slot="sidebar-inset"]`, `… > *:has(> [data-chat-column])` | opaque page layers to clear |
 | `[data-workspace-area="conversation"] > [data-timeline-loading]`, `> .bg-background` | the new-thread page's cover |
 | `[data-workspace-area="panel"]`, `="pull-requests"` | right panel, Pull requests page |
+| `[data-right-panel-tabbar]`, `[data-right-panel-surface-content]` | panel tabs (including the native-controls inset), surface content |
 | `[data-slot="composer-shell"]` + vars `--glass-opacity`, `--glass-blur`, `--glass-saturation`, `--chat-composer-glass-surface`, `--chat-composer-outline`, `--chat-composer-highlight` | the chat bar's own glass: tune these instead of stacking a second glass |
 | `[data-slot$="-popup"]`, `[data-slot$="-backdrop"]` | every popup and modal dim layer (T3 names them all this way) |
 | `[data-slot="settings-group"]`, `[data-slot="composer-context-strip"]`, `[class*="group/attachment"]` | Settings cards, the row under the composer, pasted-image tiles |
@@ -112,7 +113,7 @@ Rules that only set colours, backgrounds, borders and shadows degrade gracefully
 
 What every theme in this repo does (see `source/soft-bloom/generate.py`, `source/theme-examples/build.py`):
 
-1. **Scene** on `[data-slot="sidebar-wrapper"]` (`background: <base> url(data:…) center / cover`). It spans sidebar, chat, Pull requests and panels; portaled popups still blur it.
+1. **Scene** on `[data-slot="sidebar-wrapper"]::before` (`position: fixed; inset: 0; pointer-events: none; z-index: -1; will-change: transform; background: <base> url(data:…) center / cover`). Clear the wrapper's background and give it `isolation: isolate`, so the scene stays behind its content without disappearing behind the page. Its independent compositor layer avoids re-rasterising the art as panes slide. It spans sidebar, chat, Pull requests and panels; portaled popups still blur it. Soft Bloom uses two fixed layers to preserve its separately masked star.
 2. **Clear the opaque layers** listed in §5 (`background: transparent !important`).
 3. **Sidebar:** `[data-slot="sidebar-inner"]` as frosted glass (tint at 0.5–0.8 + `backdrop-filter: blur(12–16px)`).
 4. **Chat header:** glass bar. **Conversation:** transparent, with a *reading veil* (a horizontal gradient of the tint, full strength across the column ±440px, fading to transparent by ±620px) when the art is busy.
@@ -120,7 +121,7 @@ What every theme in this repo does (see `source/soft-bloom/generate.py`, `source
 6. **Popups** (`[data-slot$="-popup"]`): a deep "ink" tint, *darker* than the scene in dark themes, following the user's Glass opacity: `color-mix(in srgb, <ink> min(100%, calc(var(--glass-opacity, 80%) + 12%)), transparent)`, blur 24px. **Backdrops:** one dim layer.
 7. **Inside big modals** (`dialog`, `sheet`, `alert-dialog`, `command-dialog`): set `--background` to a **solid** colour (switch knobs and select triggers paint with it), `--sidebar: transparent`, `--card` faint.
 8. **Thread details card** (`[data-thread-details-card]`): T3 paints it with its *dropdown glass* (the popover colour plus a bright edge). It stays on screen, so restyle it like the sidebar glass, or it looks like a stray popup.
-9. **Right panel:** tint, **no blur** (it slides and resizes).
+9. **Right panel:** the **same tint and opacity as the chat header**, **no blur** (it slides and resizes). Paint the material once on `[data-workspace-area="panel"]`; keep `[data-right-panel-tabbar]` transparent so its tabs and native window-controls inset inherit that material without stacking a second tint.
 10. **Banners attached above the chat box** (usage limit reached, `/clear`'s "fresh session", replies; `[data-composer-banner-surface]`): set `--chat-composer-attached-surface` to the chat box's glass colour and `--chat-composer-attached-outline` to your hairline. Under a custom theme T3 otherwise paints them with `surfaceRaised` (often a faint tint) and a warning/error-coloured outline. While one is attached T3 hides the chat box's own frame, so **remove your own ring/shadow from `composer-host` too** (`[data-slot="composer-host"]:has([data-composer-banner-surface="attached"])`), or it wraps the stack in a second frame.
 11. **Status colours:** `success` and the diff counts aren't roles, but tokens you can set from CSS: `--success`, `--success-foreground`, `--diff-addition-foreground`, `--diff-deletion-foreground` (and `--info`, `--info-foreground`). Otherwise "Done" and `+N` stay T3's bright emerald on every theme. Derive `errorSurface`/`warningSurface`/`updateSurface` from your glass, and give `[data-slot="alert"]` your hairline instead of the status-coloured outline.
 12. **Selected thread:** no accent edge; a short fade (`[data-thread-item] [aria-current="page"]` animation to transparent) so it doesn't look stuck.
@@ -138,6 +139,7 @@ Every theme in this repo is captured on these 15 surfaces by `tools/capture` (§
 4. **Only one-shot animations**, triggered by interaction (focus glow, send-button pop). Nothing loops while idle. ("No continuously repainting animations" is also a T3 rule.)
 5. Don't blur every message bubble; a near-opaque fill reads the same.
 6. Prefer small text-shadows (≤ 2px blur) on chat text.
+7. **Keep static scene painting on its own fixed compositor layer**, not the layout wrapper's background. Preserve the sidebar's frosted blur; optimise the art underneath it. Check both appearance and trace data after changing layers.
 
 ## 9. Design rules this repo follows
 
@@ -150,8 +152,9 @@ Every theme in this repo is captured on these 15 surfaces by `tools/capture` (§
 
 | Tool | What it does |
 |---|---|
-| `tools/capture/capture.mjs` | Drives T3 in headless Chrome: installs themes through the real Add theme dialog, opens the 14 surfaces, screenshots each, and reports **off-palette colours** (backgrounds, borders, text far from every colour the theme defines). |
+| `tools/capture/capture.mjs` | Drives T3 in headless Chrome: installs themes through the real Add theme dialog, opens the 15 surfaces, screenshots each, and reports **off-palette colours** (backgrounds, borders, text far from every colour the theme defines). |
 | `tools/capture/sheet.py` | One contact sheet per theme from those screenshots. |
+| `tools/capture/perf.mjs` | Imports real theme files through Add theme, warms the panel/sidebar toggles, and traces repeated open/close cycles. Alternates comparison runs per theme; writes raw samples and medians to `perf.json`. No CSS injection. |
 | `tools/surface_map.py` | Maps every area, `data-slot` and hard-coded colour in a T3 source checkout; diff its output after T3 updates. |
 | `source/theme-examples/scenemin.py` + `verify.py` | Shrinks SVG art to fit the CSS limit without changing what it draws, and proves it pixel by pixel in Chrome. |
 | `source/theme-examples/tune_veils.py` | Measures how strong a reading veil must be for text over art. |
@@ -167,6 +170,29 @@ node tools/capture/capture.mjs capture.json
 ```
 
 `tools/capture/sheet.py <outDir> --compare <surface> x,y,w,h [scale] [cols]` puts one region of one surface side by side for every theme: the fastest way to spot the theme that's styled differently. `capture.json` takes `origin`, `token`, `thread` (`/<environmentId>/<threadId>`), `themeFiles`, optional `themes`, `surfaces`, `outDir`, `redact` (text to swap before screenshots), `format`/`quality`. In a fresh `--base-dir`, providers start disabled; the Claude provider's instance id is `claudeAgent`.
+
+For a repeatable performance comparison, export the baseline theme files outside the repo, pair a fresh sandbox browser, then run `node tools/capture/perf.mjs perf-config.json`:
+
+```json
+{
+  "origin": "http://127.0.0.1:3799",
+  "token": "<single-use sandbox token>",
+  "thread": "/<environmentId>/<threadId>",
+  "profileDir": "E:/Temp/theme-perf-profile",
+  "port": 9337,
+  "outDir": "E:/Temp/theme-perf",
+  "repeats": 3,
+  "cycles": 1,
+  "settleMs": 900,
+  "animationMs": 200,
+  "runs": [
+    { "label": "baseline", "themeFiles": ["E:/Temp/baseline/themes/soft-bloom.json"] },
+    { "label": "release", "themeFiles": ["themes/soft-bloom.json"] }
+  ]
+}
+```
+
+Use matching theme IDs in each run. Each sample includes `cycles` open/close pairs, measured after warm-up at 1707×960. The tool enables `animationMs` in this throwaway browser's client settings (fresh profiles default to 0 ms) and refuses to trace when animations are suppressed or reduced motion is active. It checks the imported CSS against the file and records the theme, animation state and scene-layer hint. Raster, paint, layout and layer durations are milliseconds summed over trace events; `tracedWork` is the inclusive sum of all duration events and **contains overlaps**, so it is neither elapsed time nor CPU time. Compare like-for-like samples on an otherwise idle machine, retain raw samples, and inspect medians for noise. Use a unique port and profile for every Chrome run. Do not run captures concurrently with performance measurements.
 
 ## 11. Pitfalls we hit (so you don't)
 

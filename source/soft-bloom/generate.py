@@ -135,6 +135,26 @@ def stipple_grain(op):
     )
 
 
+def sparkles_svg():
+    """Full-window sparkles/halo with the original reading-column fade baked into the art.
+
+    Keeping this mask inside the SVG leaves the base gradient and grain unmasked when
+    they share the compositor layer. No viewBox: pattern spacing stays in CSS pixels.
+    """
+    halo = halo_svg().replace("width='360' height='360'", "x='-120' y='-110' width='420' height='420'")
+    return (
+        "<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%'>"
+        "<defs><linearGradient id='fade'>"
+        "<stop offset='20%' stop-color='white'/><stop offset='30%' stop-color='white' stop-opacity='.16'/>"
+        "<stop offset='78%' stop-color='white' stop-opacity='.16'/><stop offset='88%' stop-color='white'/>"
+        "</linearGradient><mask id='mask' mask-type='alpha'>"
+        "<rect width='100%' height='100%' fill='url(#fade)'/></mask>"
+        "<pattern id='stars' x='30' y='20' width='460' height='460' patternUnits='userSpaceOnUse'>"
+        f"{stars_svg(460, 11)}</pattern></defs>"
+        f"<g mask='url(#mask)'><rect width='100%' height='100%' fill='url(#stars)'/>{halo}</g></svg>"
+    )
+
+
 def roles(p):
     base = {
         "canvas": p["base"], "chrome": p["deep"], "toolbar": p["deep"],
@@ -185,42 +205,38 @@ def roles(p):
 
 CSS = f"""/* Soft Bloom: one dithered scene behind the whole window; sidebar and chat sit on top as glass. */
 
-/* The scene lives on the root layout wrapper, so it spans sidebar + chat */
+/* Static full-window scene layers: rasterise once, independently of sliding panes. */
 [data-slot="sidebar-wrapper"] {{
   position: relative;
   isolation: isolate;
-  background-color: {P['base']} !important;
-  background-image:
-    {uri(stipple_grain(0.10))},
-    radial-gradient(120% 90% at 55% 45%, transparent 55%, rgba(0, 0, 0, 0.6) 100%),
-    linear-gradient(180deg, {P['skyTop']} 0%, {P['base']} 55%, {P['skyBottom']} 100%) !important;
-  background-size: 160px 160px, 100% 100%, 100% 100% !important;
-  background-repeat: repeat, no-repeat, no-repeat !important;
+  background: none !important;
 }}
 
-/* Pixel sparkles + faint dithered halo (top-left, seen blurred through the sidebar).
-   Faded where the reading column usually sits. */
 [data-slot="sidebar-wrapper"]::before {{
   content: "";
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background-image: {uri(stars_svg(460, 11))}, {uri(halo_svg())};
-  background-size: 460px 460px, 420px 420px;
-  background-repeat: repeat, no-repeat;
-  background-position: 30px 20px, left -120px top -110px;
-  -webkit-mask-image: linear-gradient(90deg, #000 0%, #000 20%, rgba(0, 0, 0, 0.16) 30%, rgba(0, 0, 0, 0.16) 78%, #000 88%, #000 100%);
-          mask-image: linear-gradient(90deg, #000 0%, #000 20%, rgba(0, 0, 0, 0.16) 30%, rgba(0, 0, 0, 0.16) 78%, #000 88%, #000 100%);
+  will-change: transform;
+  background-color: {P['base']} !important;
+  background-image:
+    {uri(sparkles_svg())},
+    {uri(stipple_grain(0.10))},
+    radial-gradient(120% 90% at 55% 45%, transparent 55%, rgba(0, 0, 0, 0.6) 100%),
+    linear-gradient(180deg, {P['skyTop']} 0%, {P['base']} 55%, {P['skyBottom']} 100%) !important;
+  background-size: 100% 100%, 160px 160px, 100% 100%, 100% 100% !important;
+  background-repeat: no-repeat, repeat, no-repeat, no-repeat !important;
 }}
 
 /* The big dithered star, bottom-right in the empty gutter */
 [data-slot="sidebar-wrapper"]::after {{
   content: "";
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
+  will-change: transform;
   background-image: {uri(bloom_svg())};
   background-size: 560px 560px;
   background-repeat: no-repeat;
@@ -273,9 +289,15 @@ CSS = f"""/* Soft Bloom: one dithered scene behind the whole window; sidebar and
 
 /* Right panel (browser, terminal, files, diff): tinted, no live blur, because it slides and resizes */
 [data-workspace-area="panel"] {{
-  background-color: {rgba(P['deep'], 0.9)} !important;
+  background-color: {rgba(P['deep'], 0.72)} !important;
   background-image: none !important;
   border-left: 1px solid {rgba(EDGE, 0.06)};
+}}
+
+/* The panel paints one tint through the tabs and native window-controls inset. */
+[data-right-panel-tabbar] {{
+  background: transparent !important;
+  border-color: {rgba(EDGE, 0.06)} !important;
 }}
 
 [data-thread-terminal-drawer] {{
@@ -550,6 +572,8 @@ CSS = f"""/* Soft Bloom: one dithered scene behind the whole window; sidebar and
 
 theme = {"version": 1, "id": "soft-bloom", "name": "Soft Bloom", "appearance": "dark", "canvas": P["base"], "accent": P["accent"],
          "colors": roles(P), "css": CSS}
-with open(OUT, "w", encoding="utf-8") as fh:
+if len(CSS) > 50_000 or "\\" in CSS:
+    raise ValueError("Theme CSS must fit 50,000 characters and contain no backslashes")
+with open(OUT, "w", encoding="utf-8", newline="\n") as fh:
     json.dump(theme, fh, indent=2)
 print(len(CSS), "chars css")

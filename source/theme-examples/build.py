@@ -208,6 +208,12 @@ def roles(p):
 
 TEMPLATE = """
 [data-slot="sidebar-wrapper"] {{
+  isolation: isolate;
+  background: none !important;
+}}
+[data-slot="sidebar-wrapper"]::before {{
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: -1;
+  will-change: transform;
   background: {base} SCENE center / cover no-repeat !important;
 }}
 :root {{ --surface-grain: none !important; --info-foreground: {info} !important;
@@ -238,7 +244,9 @@ TEMPLATE = """
   border-color: {e07} !important;
   box-shadow: inset 0 1px 0 {hi05}, 0 10px 30px {shadow_soft} !important;
 }}
-[data-workspace-area="panel"] {{ background-color: {panel} !important; background-image: none !important; border-left: 1px solid {e06}; }}
+/* Paint the material once across the panel, including its tabbar/native-controls inset. */
+[data-workspace-area="panel"] {{ background-color: {header} !important; background-image: none !important; border-left: 1px solid {e06}; }}
+[data-right-panel-tabbar] {{ background: transparent !important; border-color: {e06} !important; }}
 [data-thread-terminal-drawer] {{ border-top: 1px solid {e07}; }}
 [data-workspace-area="pull-requests"] {{ background-color: {page_veil} !important; background-image: none !important; }}
 [data-workspace-area="pull-requests"] > header,
@@ -361,7 +369,7 @@ def css_for(scene, p, scene_url, veil):
         veil=rgba(p["tint"], round(veil + VEIL_MARGIN, 2)),
         side_glass=rgba(p["tint"], side_alpha),
         side_blur=f"backdrop-filter: blur({blur}px) saturate(115%); ",
-        panel=rgba(p["deep"], 0.92), page_veil=rgba(p["tint"], 0.62), header=rgba(p["tint"], 0.78),
+        page_veil=rgba(p["tint"], 0.62), header=rgba(p["tint"], 0.78),
         bubble92=rgba(p["bubble"], 0.94), code=rgba(p["deep"], 0.86),
         composer_op=round(min(78, max(55, p["opacity"] * 100 + 22))), composer_blur=max(12, blur),
         e035=rgba(e, 0.035), e045=rgba(e, 0.045), e05=rgba(e, 0.05), e055=rgba(e, 0.055), e06=rgba(e, 0.07),

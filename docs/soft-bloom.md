@@ -20,22 +20,25 @@ Edges are always the text colour, never the accent, so the whole theme reads as 
 ## Layers
 
 ```
-[data-slot="sidebar-wrapper"]       the scene, behind the whole window
-    background   base gradient, vignette, stipple grain
-    ::before     pixel sparkles and a dithered halo, faded under the text column
-    ::after      the big dithered star in the bottom-right gutter
+[data-slot="sidebar-wrapper"]       isolated stacking context; transparent background
+    ::before     fixed compositor layer: base gradient, vignette, stipple grain,
+                 pixel sparkles and a dithered halo, faded under the text column
+    ::after      fixed compositor layer: the big dithered star in the bottom-right gutter
   [data-slot="sidebar-inner"]       frosted glass: deep 50%, blur 14px
   [data-chat-header]                glass bar: deep 72%, blur 8px
   conversation                      transparent; user bubbles 92% solid
   [data-slot="composer-shell"]      T3's own chat-box glass, tuned: 50%, blur 16px
   [data-thread-details-card]        the sidebar's glass: deep 60%, blur 14px
-  [data-workspace-area="panel"]     right panel: deep 90%, no blur (it slides)
+  [data-workspace-area="panel"]     right panel: deep 72%, matching the chat header; no blur
+    [data-right-panel-tabbar]       transparent, including the native-controls inset
 popups [data-slot$="-popup"]        ink at Glass opacity + 12% (small popups + 14%), blur 24px
                                     sheets: ink 97%, no blur (they slide)
 [data-slot$="-backdrop"]            one dim layer for every modal: near-black 62%, blur 4px
 ```
 
-The scene sits on the root layout element rather than `body`, so it spans the sidebar, the chat, the Pull requests page and the right panel. Popups are portaled outside it but still blur it, because `backdrop-filter` sees everything painted behind them.
+The scene's two pseudo-elements are fixed to the window, behind the content at `z-index: -1`, with `pointer-events: none` and `will-change: transform`. The wrapper's `isolation: isolate` keeps them above the page background. They span the sidebar, chat, Pull requests page and right panel without re-rasterising the art as panes slide. Popups are portaled outside the wrapper but still blur it, because `backdrop-filter` sees everything painted behind them.
+
+The sparkles/halo fade lives inside its SVG so it masks only that art, leaving the shared layer's base gradient and grain untouched. The star keeps its separate CSS mask and 42% opacity. Pattern spacing, corner offsets and sidebar blur are unchanged.
 
 ## Colour roles
 
