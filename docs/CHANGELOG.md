@@ -1,6 +1,11 @@
 # Changelog
 
-## v10 (current)
+## v11 (current)
+- **Roles-first.** The 15 translucent token values (`--border`, `--input`, `--accent`, `--muted`, `--secondary`, `--surface-raised`, `--card`, `--popover`, `--code-background`, chrome, toolbar and `--sidebar-border`) now come from the theme's colour roles instead of a CSS override block. T3 maps them into the sidebar scope itself, so the fragile `[data-app-sidebar]` selector is gone. On a T3 build without theme CSS, users now get the full palette, transparency included.
+- Sidebar rows use T3's stable `[data-thread-item]` hook plus the standard `aria-current="page"` instead of the internal `[data-sidebar-row]`.
+- No visual change. Checked live against v10: every token at the root and in the sidebar, the chat, Settings (switch knobs, select triggers, group cards), Usage, the model-picker popover and the selected-row fade.
+
+## v10
 - The sidebar's "Working" status (label and spinner) uses a soft moonlight grey-blue (`#b9c3d6`, via `--info-foreground`) instead of T3's bright blue, so it matches the palette.
 
 ## v9

@@ -1,6 +1,8 @@
-# Surface audit (v9)
+# Surface audit (v9, re-checked for v11)
 
 Every surface checked, how it was checked, and what's known. "Live" means it was verified in a running T3 Code `0.1.10-nightly.20261116` web client at 1707×960, or in the desktop app where it says so.
+
+v11 moved the tokens into colour roles without a visual change. Before it was merged, the chat, sidebar, Settings → General, Usage, the model picker and the selected-row fade were re-checked live and matched v10.
 
 | Surface | How it's themed | Verified | Notes |
 |---|---|---|---|

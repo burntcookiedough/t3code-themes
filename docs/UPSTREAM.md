@@ -1,6 +1,6 @@
 # Contributing upstream to T3 Code
 
-What we found, what T3's rules allow, and what we plan to post. Checked 2026-11-17 against `pingdotgg/t3code` (`CONTRIBUTING.md`, `AGENTS.md`, issue and PR templates).
+What we found, what T3's rules allow, and what we did. Checked 2026-11-17 against `pingdotgg/t3code` (`CONTRIBUTING.md`, `AGENTS.md`, issue and PR templates).
 
 ## T3's rules, in short
 
@@ -21,11 +21,15 @@ None of the bugs we found are unaddressed, so **no PR from us** (the rules would
 
 ## Related Ideas that already exist (upvote rather than duplicate)
 
+All three upvoted on 2026-11-17.
+
 - [#33317](https://github.com/pingdotgg/t3code/discussions/33317) Theme files: optional canvas backdrop (glow + dot/grid pattern)
 - [#32665](https://github.com/pingdotgg/t3code/discussions/32665) Theme files: add a colour role for the composer outline
 - [#37449](https://github.com/pingdotgg/t3code/discussions/37449) Theme hooks for sidebar rows
 
-## Draft Ideas post (not yet posted)
+## Draft Ideas post (not posted)
+
+Kept for reference only. The decision on 2026-11-17 was not to post it.
 
 **Title:** Theme CSS: add the page layers to the stable hook list
 

@@ -46,21 +46,21 @@ portals (outside the wrapper)
 
 ## Design tokens
 
-T3 builds almost every surface from about 15 CSS variables. Overriding them is what makes surfaces the theme never targets directly still match. They're set on `:root` **and** `[data-app-sidebar]`, because T3 redeclares its tokens there.
+T3 builds almost every surface from about 15 CSS variables. Setting them is what makes surfaces the theme never targets directly still match. Since v11 they come from the theme's **colour roles** (`roles()` in `src/generate.py`), not from CSS. T3 maps each role onto its token at the root and in the sidebar scope, so one value reaches both, and it still applies on builds without theme CSS.
 
-| Token | Value | Effect |
+| Token (role) | Value | Effect |
 |---|---|---|
-| `--border` | cream 7.5% | every hairline in the app |
-| `--input` | cream 12% | input borders, unchecked switch tracks |
-| `--accent` | cream 6.5% | hover fills |
+| `--border` (`border`) | cream 7.5% | every hairline in the app |
+| `--input` (`input`) | cream 12% | input borders, unchecked switch tracks |
+| `--accent` (`accentSurface`) | cream 6.5% | hover fills |
 | `--muted`, `--secondary`, `--surface-raised` | cream 5–5.5% | chips, buttons, raised blocks |
-| `--card` | `rgba(22,22,26,.55)` | cards on the scene |
-| `--popover` | `rgba(16,16,19,.86)` | popover fallback |
-| `--code-background` | `rgba(6,6,7,.72)` | code blocks |
+| `--card` (`surface`) | `rgba(22,22,26,.55)` | cards on the scene |
+| `--popover` (`surfaceOverlay`) | `rgba(16,16,19,.86)` | popover fallback |
+| `--code-background` (`codeBackground`) | `rgba(6,6,7,.72)` | code blocks |
 | `--app-chrome-background`, `--toolbar-background` | `rgba(6,6,7,.55)` | desktop titlebar and toolbars |
 | `--toolbar-*`, `--sidebar-border` | cream 5–8.5% | toolbar controls, sidebar edge |
-| `--surface-grain` | `none` | turns off T3's own grain; the scene has its own |
-| `--info-foreground` | `#b9c3d6` | "info" status such as the sidebar's Working spinner: soft moonlight instead of bright blue |
+| `--surface-grain` (CSS) | `none` | turns off T3's own grain; the scene has its own |
+| `--info-foreground` (CSS) | `#b9c3d6` | "info" status such as the sidebar's Working spinner: soft moonlight instead of bright blue |
 
 `--background` is deliberately **not** made transparent globally. T3 uses it both as a page surface and as the fill for small controls (switch knobs, select triggers). So the theme clears specific page layers instead. Inside modals it's set to solid `#0e0e11` (see the v7 fix in the changelog).
 
@@ -69,7 +69,7 @@ Inside big modals (`dialog`, `sheet`, `alert-dialog`, `command-dialog`) a second
 ## Stable hooks the theme relies on
 
 T3 documents these selectors as stable:
-`data-slot="sidebar"|"sidebar-inner"`, `data-thread-item`, `data-chat-header`, `data-workspace-area="conversation"`, `.messages-timeline-scroll`, `data-message-role`, `data-user-message-bubble`, `.chat-markdown`, `.chat-markdown-codeblock`, `data-chat-composer-form`, `data-slot="composer-host"`, `data-thread-terminal-drawer`, `data-slot="button"|"input"|"switch"|"select-trigger"|"dialog-popup"|"popover-popup"|"menu-popup"|"tooltip-popup"|"scroll-area-thumb"`.
+`data-slot="sidebar"|"sidebar-inner"`, `data-thread-item` (with `aria-current="page"` for the selected row), `data-chat-header`, `data-workspace-area="conversation"`, `.messages-timeline-scroll`, `data-message-role`, `data-user-message-bubble`, `.chat-markdown`, `.chat-markdown-codeblock`, `data-chat-composer-form`, `data-slot="composer-host"`, `data-thread-terminal-drawer`, `data-slot="button"|"input"|"switch"|"select-trigger"|"dialog-popup"|"popover-popup"|"menu-popup"|"tooltip-popup"|"scroll-area-thumb"`.
 
 The theme also uses these, found by reading the live app. They are **not** guaranteed stable, so they're the first things to check after an update:
 
@@ -84,11 +84,9 @@ The theme also uses these, found by reading the live app. They are **not** guara
 | `[data-slot="composer-context-strip"]` | the row under the composer ("Full access") |
 | `[data-chat-composer-form] button[type="submit"]` | the send button |
 | `[contenteditable] > p:only-child > br.ProseMirror-trailingBreak:only-child` | "the composer is empty" |
-| `[data-sidebar-row]` | sidebar row transitions |
 | `[data-slot$="-popup"]`, `[data-slot$="-backdrop"]` | every popup and modal dim layer (T3 names all of them this way) |
 | `[data-slot="settings-group"]` | Settings group cards |
 | `[class*="group/attachment"]` | pasted-image tiles |
-| `[data-app-sidebar]` | where T3 redeclares its tokens |
 
 ## The art
 

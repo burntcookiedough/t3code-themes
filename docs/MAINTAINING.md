@@ -16,7 +16,7 @@ T3 Code is moving fast, and the theme CSS API is nightly-only as of Nov 2026. Th
 3. Things that would mean something broke:
    - **A flat, opaque area where the scene used to show through:** T3 renamed or added a page wrapper. Find it in DevTools (an element with a solid `background-color` between `[data-slot="sidebar-wrapper"]` and the content) and add it to the "Clear every opaque layer" list in `src/generate.py`.
    - **No scene at all:** `[data-slot="sidebar-wrapper"]` was renamed. Move the scene rules to the new root layout element (or to `body`).
-   - **Invisible switch knobs or controls:** some control now paints with a token the theme made transparent. Check `--background`, `--sidebar` and `--card` inside modals.
+   - **Invisible switch knobs or controls:** some control now paints with a token the theme made transparent. Check `--background`, `--sidebar` and `--card` inside modals, and the colour roles in `roles()` in `src/generate.py`.
    - **A double frame around the chat bar:** T3 changed the composer's glass structure. Re-check `composer-shell` / `composer-host`.
 
 ## When theme CSS reaches stable
@@ -28,8 +28,8 @@ T3 Code is moving fast, and the theme CSS API is nightly-only as of Nov 2026. Th
 ## Rules for changes
 
 - **Keep the CSS under 50,000 characters.** The generator prints the size. Over the limit, Add theme **silently drops the CSS** (colours only, no error).
-- **Keep the whole JSON file under 32 KB.** `t3 theme set <file>` rejects bigger files (Add theme allows 256 KB). v9 is about 23 KB.
+- **Keep the whole JSON file under 32 KB.** `t3 theme set <file>` rejects bigger files (Add theme allows 256 KB). v11 is about 22.6 KB.
 - **Don't animate anything that sits under a `backdrop-filter`,** and don't blur anything that slides or resizes. See "Performance rules" in ARCHITECTURE.md.
 - **Avoid `:has()` on large or root containers.**
-- **Prefer tokens over selectors.** A token change reaches screens you never open.
+- **Prefer colour roles over CSS, and tokens over selectors.** A role change reaches screens you never open, and also works where theme CSS isn't supported.
 - **After a change:** regenerate, publish, then run the health check.

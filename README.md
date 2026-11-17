@@ -6,7 +6,7 @@ The theme is one JSON file. A Python script generates it, and T3 Code's `t3 them
 
 | | |
 |---|---|
-| Current version | **v10** (`themes/soft-bloom.json`) |
+| Current version | **v11** (`themes/soft-bloom.json`) |
 | Built against | T3 Code `0.1.10-nightly.20261116` |
 | Needs | A T3 Code build with **theme CSS** support (nightly as of Nov 2026). Stable `0.1.9` only applies the colours. See [Compatibility](#compatibility). |
 | Appearance | Dark only |
@@ -34,7 +34,7 @@ Edit `src/generate.py`, then regenerate and publish:
 
 Both scripts run `python src/generate.py themes/soft-bloom.json` and then `t3 theme set themes/soft-bloom.json`.
 
-The generator only uses the Python standard library. All the art (dither filters, stars, grain) is drawn as SVG and embedded in the CSS, so the theme has no external files. The CSS must stay under T3's 50,000-character limit. It's currently about 19,400.
+The generator only uses the Python standard library. All the art (dither filters, stars, grain) is drawn as SVG and embedded in the CSS, so the theme has no external files. The CSS must stay under T3's 50,000-character limit. It's currently about 19,700.
 
 ## Roll back
 

@@ -23,7 +23,7 @@ Every selector in the generated CSS, sorted:
 | Group | Count | Selectors |
 |---|---:|---|
 | Official stable hooks, standard HTML/ARIA attributes, global pseudo-elements | 31 | chat header, conversation, timeline scroll, message rows and bubbles, `.chat-markdown`, code blocks, composer form/host/editable, send button (`[data-chat-composer-form] button[type="submit"]`), sidebar inner, terminal drawer, button, dialog/popover/menu/tooltip popups, scroll thumb, `::selection`, `:root` |
-| Internal, **can move to stable** | 5 | `[data-app-sidebar]` (token scope) and four `[data-sidebar-row]` rules |
+| Internal, **can move to stable** | 5 | `[data-app-sidebar]` (token scope) and four `[data-sidebar-row]` rules. *All five moved in v11.* |
 | Internal, **needed, degrades gracefully** | 21 | the scene on `[data-slot="sidebar-wrapper"]` (and `::before` / `::after`); clearing opaque layers (`sidebar-inset`, the chat column wrapper, `[data-timeline-loading]`, `.bg-background`); `[data-workspace-area="panel"]` and `"pull-requests"`; `composer-shell` (T3's glass variables); `composer-context-strip`; pasted-image tiles (`group/attachment`); `settings-group`; the extra popup kinds (sheet, alert, command, select, combobox, autocomplete, preview card, toast) and the `-backdrop` family |
 
 There are **no values with backslashes**, so nothing gets dropped by T3's filter.
@@ -43,16 +43,12 @@ If T3 renames one of these internals, that rule simply stops matching. Nothing b
 
 ## Recommendations
 
-1. **Move the 15 translucent token values into colour roles.** This is done on the `roles-first` branch as v11, *not published*. It:
+1. **Move the 15 translucent token values into colour roles.** Done in **v11** (published 2026-11-17). It:
    - deletes the CSS token block and the fragile `[data-app-sidebar]` selector (T3 maps roles into the sidebar scope itself);
    - gives stable-without-CSS users the full palette, transparency included.
 
-   Before publishing, verify live:
-   - the main chat, Settings, Usage, popovers and `html_render` charts;
-   - the chips that derive colours from roles.
-
-   T3 feeds roles into a few JavaScript calculations as well as CSS.
-2. **Use the stable `[data-thread-item]` hook** (plus the standard `aria-current`) for sidebar rows. This is also done on `roles-first`.
+   Verified live against v10 before merging: every token at the root and in the sidebar scope, the main chat, Settings, Usage, the model-picker popover and the selected-row fade all matched. T3 feeds roles into a few JavaScript calculations as well as CSS; nothing changed visibly.
+2. **Use the stable `[data-thread-item]` hook** (plus the standard `aria-current`) for sidebar rows. Done in **v11**.
 3. **Keep the embedded SVG art, on purpose.** The official background-image path only works for themes installed with `t3 theme set` (it loads from the server's themes folder). A theme imported through **Add theme**, which is how most community users will install, can't carry an image file. Embedded `data:` SVG is explicitly allowed by T3's filter and is the only way to ship the scene in a single importable file. Optionally, a future version could *also* ship a raster background for `t3 theme set` users.
 4. **Treat the `--info-foreground` override as optional.** T3 keeps "info" fixed on purpose. The override works today because theme CSS applies after T3's styles, but it isn't part of the contract.
 5. **Re-run `tools/surface_map.py` on every T3 update** and diff `docs/SURFACE-MAP.md`. A removed slot or workspace area shows up as a changed line.
