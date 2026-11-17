@@ -22,10 +22,11 @@
 //   from the theme's colours. A border that matches its own fill (a solid button) is not an edge.
 // Exits with status 1 if a theme didn't install, a surface didn't open, or a theme wasn't applied.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
-import { join } from 'node:path'
+import { join, resolve } from 'node:path'
 import { launch, sleep } from './cdp.mjs'
 
 const cfg = JSON.parse(readFileSync(process.argv[2], 'utf8'))
+cfg.themeFiles = cfg.themeFiles.map(file => resolve(file))
 const W = cfg.width || 1707, H = cfg.height || 960
 
 const click = (selector, label) => `(()=>{const re=${label};const e=[...document.querySelectorAll(${JSON.stringify(selector)})]
@@ -59,8 +60,10 @@ const SURFACES = {
     steps: [{ hover: 'button[aria-label="Toggle right panel"]' }, { wait: 1400 }] },
   'files-panel': { path: 'thread', expect: seen('[data-workspace-area="panel"]'),
     steps: [{ js: button('Toggle right panel') }, { wait: 900 }, { js: panelSurface('Files') }, { wait: 1500 }] },
-  'diff-panel': { path: 'thread', expect: seen('[data-workspace-area="panel"]'),
-    steps: [{ js: button('Toggle right panel') }, { wait: 900 }, { js: panelSurface('Diff') }, { wait: 2000 }] },
+  'diff-panel': { path: 'thread', expect: `!!document.querySelector('[data-workspace-area="panel"]')&&[...document.querySelectorAll('diffs-container')].some(e=>e.shadowRoot?.querySelector('[data-line]'))`,
+    steps: [{ js: button('Toggle right panel') }, { wait: 900 }, { js: panelSurface('Diff') }, { wait: 2000 },
+      { waitFor: `!!document.querySelector('button[aria-label="Expand all files"],button[aria-label="Collapse all files"]')` },
+      { js: `(()=>{const b=document.querySelector('button[aria-label="Expand all files"]');if(b){b.click();return true}return !!document.querySelector('button[aria-label="Collapse all files"]')})()` }, { wait: 900 }] },
   'terminal': { path: 'thread', expect: seen('[data-thread-terminal-drawer]'), steps: [{ js: button('Toggle terminal drawer') }, { wait: 1800 }] },
   'delete-dialog': { path: 'thread', expect: seen('[data-slot="alert-dialog-popup"]'),
     steps: [{ js: button('Thread actions') }, { wait: 700 }, { js: click('[role="menuitem"]', '/^Delete/') }, { wait: 900 }] },
@@ -104,7 +107,9 @@ const PROBE = `(()=>{
 
   const colours = new Map(), edges = new Map();
   const note = (map, what, value, el, d) => { const k = what + ' ' + value; const cur = map.get(k) || { what, value, distance: +d.toFixed(3), count: 0,
-    sample: (el.getAttribute('data-slot') || el.tagName.toLowerCase()) + ' ' + (el.textContent || '').trim().slice(0, 40) }; cur.count++; map.set(k, cur) };
+    sample: (el.getAttribute('data-slot') || el.tagName.toLowerCase()) + ' ' + (el.textContent || '').trim().slice(0, 40), maxArea: 0 };
+    const b = el.getBoundingClientRect(); cur.maxArea = Math.max(cur.maxArea, Math.round(b.width * b.height));
+    cur.count++; map.set(k, cur) };
   const SHADOW_COLOURS = /(?:rgba?|oklab|oklch|color)\\([^)]*\\)|#[0-9a-f]{3,8}\\b/gi;
   const edgesOf = cs => { const out = [];
     for (const side of ['Top', 'Right', 'Bottom', 'Left']) if (parseFloat(cs['border' + side + 'Width']) > 0 && cs['border' + side + 'Style'] !== 'none') out.push(['border', cs['border' + side + 'Color']]);
@@ -130,7 +135,16 @@ const PROBE = `(()=>{
       if (accent) note(edges, 'accent ' + what, value, el, d); else if (d > .08) note(edges, what, value, el, d) }
   }
   const top = m => [...m.values()].sort((a, b) => b.distance * b.count - a.distance * a.count).slice(0, 12);
-  return { colours: top(colours), edges: top(edges), themeId: document.documentElement.getAttribute('data-theme-id') };
+  const material = {};
+  for (const [name, selector, pseudo] of [
+    ['scene', '[data-slot="sidebar-wrapper"]', '::before'], ['sidebar', '[data-slot="sidebar-inner"]'],
+    ['header', '[data-chat-header]'], ['panel', '[data-workspace-area="panel"]'], ['tabbar', '[data-right-panel-tabbar]']]) {
+    const el = document.querySelector(selector); if (!el) continue; const cs = getComputedStyle(el, pseudo);
+    material[name] = { background: cs.backgroundColor, blur: cs.backdropFilter, position: cs.position,
+      willChange: cs.willChange, zIndex: cs.zIndex, pointerEvents: cs.pointerEvents };
+  }
+  const accentEdges = [...edges.values()].filter(e => e.what.startsWith('accent '));
+  return { colours: top(colours), edges: [...accentEdges, ...top(new Map([...edges].filter(([, e]) => !e.what.startsWith('accent '))))], material, themeId: document.documentElement.getAttribute('data-theme-id') };
 })()`
 
 // Replace private text (a machine name, say) on the page just before a screenshot. Screenshots only.
@@ -150,11 +164,21 @@ const page = await launch({ profileDir: cfg.profileDir || '.capture-profile', wi
 try {
   await page.go(`${cfg.origin}/pair#token=${cfg.token}`, 4000)
   await page.go(`${cfg.origin}/settings/appearance`, 3000)
+  await page.wait(`[...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='Add theme')`)
   await page.js(`localStorage.removeItem('t3code:themes:v1'); true`)
   await page.go(`${cfg.origin}/settings/appearance`, 3000)
+  await page.wait(`[...document.querySelectorAll('button')].some(b=>b.textContent.trim()==='Add theme')`)
   if (!await page.js(button('Add theme'))) throw new Error('No Add theme button: is the token valid?')
   await sleep(1200)
   await page.upload('[role="dialog"] input[type=file]', cfg.themeFiles)
+  if (cfg.themeFiles.length === 1) {
+    let confirmed = false
+    for (let n = 0; n < 40 && !confirmed; n++) {
+      await sleep(250)
+      confirmed = await page.js(`(()=>{const b=[...document.querySelectorAll('[role="dialog"] button')].filter(b=>b.textContent.trim()==='Add theme').at(-1);if(!b||b.disabled)return false;b.click();return true})()`)
+    }
+    if (!confirmed) throw new Error('Single-file import did not become ready')
+  }
   await sleep(2500)
   const installed = await page.js(`JSON.parse(localStorage.getItem('t3code:themes:v1')||'[]').map(t=>t.id)`)
   for (const id of ids) if (!installed.includes(id)) fail(`${id}: not installed by Add theme`)
@@ -167,10 +191,13 @@ try {
       const spec = SURFACES[s]
       await page.js(`localStorage.setItem('t3code:theme-halves:v1', ${JSON.stringify(JSON.stringify({ [appearance[id]]: id }))}); localStorage.setItem('t3code:theme-appearance-mode', ${JSON.stringify(appearance[id])}); true`)
       await page.go(cfg.origin + (spec.path === 'thread' ? cfg.thread : spec.path), 3200)
+      await page.wait(`document.documentElement.getAttribute('data-theme-id')===${JSON.stringify(id)}`)
+      if (spec.path === 'thread') await page.wait(`!!document.querySelector('[data-message-role]')&&!document.querySelector('[data-timeline-loading]')`)
       if (spec.path === 'thread') await page.js(RESET)
       await page.mouse(W - 5, H - 5)  // park the pointer away from hover states
       for (const step of spec.steps || []) {
         if (step.js && await page.js(step.js).catch(() => false) === false) fail(`${id}/${s}: a step found nothing to act on`)
+        if (step.waitFor) await page.wait(step.waitFor)
         if (step.key) await page.key(step.key, { modifiers: step.modifiers || 0 })
         if (step.type) await page.type(step.type)
         if (step.enter) await page.enter()
@@ -180,10 +207,24 @@ try {
         }
         await sleep(step.wait || 700)
       }
-      if (!await page.js(spec.expect).catch(() => false)) fail(`${id}/${s}: the surface did not open`)
+      try { await page.wait(spec.expect) } catch { fail(`${id}/${s}: the surface did not open`) }
+      // The first code highlighter load is lazy. A blank Suspense placeholder is not a gallery image.
+      if (spec.path === 'thread') {
+        let ready = false
+        for (let n = 0; n < 40 && !ready; n++) {
+          ready = await page.js(`[...document.querySelectorAll('.chat-markdown-codeblock')].every(b=>b.querySelector('pre')?.textContent.trim())`)
+          if (!ready) await sleep(250)
+        }
+        if (!ready) fail(`${id}/${s}: code blocks did not finish rendering`)
+      }
+      await page.js(`document.fonts.ready.then(()=>true)`)
       const probe = await page.js(PROBE)
-      if (probe.themeId && probe.themeId !== id) fail(`${id}/${s}: T3 shows theme "${probe.themeId}"`)
-      report.themes[id][s] = spec.probe === false ? { colours: [], edges: probe.edges } : { colours: probe.colours, edges: probe.edges }
+      if (probe.themeId !== id) fail(`${id}/${s}: T3 shows theme "${probe.themeId}"`)
+      if (probe.edges.some(e => e.what.startsWith('accent '))) fail(`${id}/${s}: accent-coloured edge (see report)`)
+      const { scene, panel, header, tabbar } = probe.material
+      if (scene?.position !== 'fixed' || !scene.willChange.includes('transform') || scene.zIndex !== '-1' || scene.pointerEvents !== 'none') fail(`${id}/${s}: scene is not an independent fixed layer`)
+      if (panel && (panel.blur !== 'none' || panel.background !== header?.background || tabbar?.background !== 'rgba(0, 0, 0, 0)')) fail(`${id}/${s}: panel/header materials differ or panel has blur`)
+      report.themes[id][s] = { colours: spec.probe === false ? [] : probe.colours, edges: probe.edges, material: probe.material }
       if (cfg.redact) await page.js(REDACT(cfg.redact))
       await page.shot(join(out, id, `${s}.${cfg.format || 'png'}`), cfg.format, cfg.quality)
     }

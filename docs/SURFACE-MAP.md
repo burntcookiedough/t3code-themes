@@ -8,7 +8,7 @@ T3 Code source: `pingdotgg/t3code` at `70a7cfe (2026-11-16)`. Theme checked for 
 - Surface areas: **92**
 - `data-slot` hooks defined: **208**, of which **14** are in T3's stable list
 - Workspace areas: `composer`, `conversation`, `details`, `home`, `panel`, `pull-requests`, `settings`, `settings-nav`, `sidebar`, `terminal`
-- Soft Bloom CSS touches 25 slots, 2 slot suffix patterns and 15 other data attributes
+- Soft Bloom CSS touches 25 slots, 2 slot suffix patterns and 16 other data attributes
 
 **Columns:** *token uses* = Tailwind classes that read theme tokens (themed automatically). *palette / literal* = hard-coded colours that ignore themes (cohesion risks). *stable hooks* = selectors from T3's official list present in that area.
 

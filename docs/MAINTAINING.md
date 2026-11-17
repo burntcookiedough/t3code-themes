@@ -12,6 +12,7 @@ Theme CSS shipped in stable T3 Code **v0.1.10** (November 2026). These themes we
    - **Invisible switch knobs or controls:** a control now paints with a token the theme made transparent. Check `--background`, `--sidebar` and `--card` inside modals, and the colour roles.
    - **A double frame around the chat bar:** T3 changed the composer's glass. Re-check `composer-shell` and `composer-host`.
    - **A dark card with a bright edge on a glass theme:** another persistent element now uses T3's dropdown glass. Restyle it like `[data-thread-details-card]`.
+   - **The panel's tabs or window-controls inset look darker than the chat header:** check `[data-right-panel-tabbar]` and its parent panel. Paint the header tint once on the panel; avoid stacking another tint on the bar.
 
 The hooks most likely to change are listed in §5 of the guide.
 
@@ -20,6 +21,7 @@ The hooks most likely to change are listed in §5 of the guide.
 - **Keep each theme's CSS under 50,000 characters.** Both generators print the size, and the scenes' build fails over it. Over the limit, Add theme refuses the file.
 - **Mind the file size.** Add theme accepts up to 256 KB. `t3 theme set <file>` accepted 51 KB files on `0.1.10-nightly.20261116`.
 - **Don't animate anything under a `backdrop-filter`**, and don't blur anything that slides or resizes.
+- **Keep the scene on a fixed compositor layer** (`::before`, plus Soft Bloom's `::after`) inside the isolated wrapper; preserve the sidebar blur. Compare real installed files with `tools/capture/perf.mjs` after layer changes.
 - **Avoid `:has()` on large or root containers.**
 - **Prefer colour roles over CSS.** A role reaches screens you never open, and works where theme CSS isn't supported.
 - **After a change:** regenerate (`source/`), run the health check, regenerate the screenshots and README (`tools/make_readme.py`).

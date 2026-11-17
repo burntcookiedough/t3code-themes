@@ -54,6 +54,14 @@ export async function launch({ profileDir, width = 1707, height = 960, port = 93
       if (failed) throw new Error(`Could not open ${url}: ${failed}`)
       await sleep(wait)
     },
+    async wait(expression, timeout = 15000) {
+      const deadline = Date.now() + timeout
+      while (Date.now() < deadline) {
+        if (await page.js(expression)) return
+        await sleep(150)
+      }
+      throw new Error(`Page condition timed out: ${expression}`)
+    },
     async shot(file, format = 'png', quality = 90) {
       const r = await send('Page.captureScreenshot', format === 'png' ? { format } : { format, quality })
       writeFileSync(file, Buffer.from(r.result.data, 'base64'))

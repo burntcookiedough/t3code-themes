@@ -154,7 +154,7 @@ Every theme in this repo is captured on these 15 surfaces by `tools/capture` (§
 |---|---|
 | `tools/capture/capture.mjs` | Drives T3 in headless Chrome: installs themes through the real Add theme dialog, opens the 15 surfaces, screenshots each, and reports **off-palette colours** (backgrounds, borders, text far from every colour the theme defines). |
 | `tools/capture/sheet.py` | One contact sheet per theme from those screenshots. |
-| `tools/capture/perf.mjs` | Imports real theme files through Add theme, warms the panel/sidebar toggles, and traces repeated open/close cycles. Alternates comparison runs per theme; writes raw samples and medians to `perf.json`. No CSS injection. |
+| `tools/capture/perf.mjs` | Imports real theme files through Add theme and traces panel/sidebar open/close cycles. Alternates comparison runs per theme; writes raw samples, state and medians to `perf.json`. Supports optional animation and warm-up. No CSS injection. |
 | `tools/surface_map.py` | Maps every area, `data-slot` and hard-coded colour in a T3 source checkout; diff its output after T3 updates. |
 | `source/theme-examples/scenemin.py` + `verify.py` | Shrinks SVG art to fit the CSS limit without changing what it draws, and proves it pixel by pixel in Chrome. |
 | `source/theme-examples/tune_veils.py` | Measures how strong a reading veil must be for text over art. |
@@ -171,6 +171,8 @@ node tools/capture/capture.mjs capture.json
 
 `tools/capture/sheet.py <outDir> --compare <surface> x,y,w,h [scale] [cols]` puts one region of one surface side by side for every theme: the fastest way to spot the theme that's styled differently. `capture.json` takes `origin`, `token`, `thread` (`/<environmentId>/<threadId>`), `themeFiles`, optional `themes`, `surfaces`, `outDir`, `redact` (text to swap before screenshots), `format`/`quality`. In a fresh `--base-dir`, providers start disabled; the Claude provider's instance id is `claudeAgent`.
 
+Capture waits for the selected theme, loaded thread, requested surface, fonts and code blocks. It fails on missing surfaces, accent-coloured edges, a missing fixed scene layer, or mismatched panel/header material (including panel blur). The report includes computed material values and each off-palette finding's largest element area; review large surfaces visually even when only a few elements are flagged. Appearance swatches and Usage provider colours are deliberately excluded from the colour probe, but their edges are still checked.
+
 For a repeatable performance comparison, export the baseline theme files outside the repo, pair a fresh sandbox browser, then run `node tools/capture/perf.mjs perf-config.json`:
 
 ```json
@@ -181,10 +183,11 @@ For a repeatable performance comparison, export the baseline theme files outside
   "profileDir": "E:/Temp/theme-perf-profile",
   "port": 9337,
   "outDir": "E:/Temp/theme-perf",
-  "repeats": 3,
-  "cycles": 1,
+  "repeats": 1,
+  "cycles": 2,
   "settleMs": 900,
-  "animationMs": 200,
+  "animationMs": 0,
+  "warmup": false,
   "runs": [
     { "label": "baseline", "themeFiles": ["E:/Temp/baseline/themes/soft-bloom.json"] },
     { "label": "release", "themeFiles": ["themes/soft-bloom.json"] }
@@ -192,7 +195,7 @@ For a repeatable performance comparison, export the baseline theme files outside
 }
 ```
 
-Use matching theme IDs in each run. Each sample includes `cycles` open/close pairs, measured after warm-up at 1707×960. The tool enables `animationMs` in this throwaway browser's client settings (fresh profiles default to 0 ms) and refuses to trace when animations are suppressed or reduced motion is active. It checks the imported CSS against the file and records the theme, animation state and scene-layer hint. Raster, paint, layout and layer durations are milliseconds summed over trace events; `tracedWork` is the inclusive sum of all duration events and **contains overlaps**, so it is neither elapsed time nor CPU time. Compare like-for-like samples on an otherwise idle machine, retain raw samples, and inspect medians for noise. Use a unique port and profile for every Chrome run. Do not run captures concurrently with performance measurements.
+Use matching theme IDs in each run. Each sample includes `cycles` open/close pairs at 1707×960. The example matches the supplied reference experiment's first toggles and T3's default instant panes. For a warmed animation stress test use `animationMs: 200`, `warmup: true`, `repeats: 3`, `cycles: 1`. The tool sets the duration only in this throwaway browser's client settings and refuses to trace when the animation state differs or reduced motion is active. It checks imported CSS against the file and records the theme, animation state and scene-layer hint. Raster, paint, layout and layer durations are milliseconds summed over trace events; `tracedWork` is the inclusive sum of all duration events and **contains overlaps**, so it is neither elapsed time nor CPU time. First-open panel measurements can include lazy module and highlighter work. Compare like-for-like samples on an otherwise idle machine, retain raw samples, and inspect medians for noise. Use a unique port and profile for every Chrome run. Do not run captures concurrently with performance measurements.
 
 ## 11. Pitfalls we hit (so you don't)
 

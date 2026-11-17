@@ -27,7 +27,9 @@ def sheet(folder, theme):
     out = os.path.join(folder, f"{theme}.sheet.png")
     subprocess.run([CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--allow-file-access-from-files",
                     f"--window-size={COLS * (TW + 3)},{rows * (TH + 3)}", f"--screenshot={os.path.abspath(out)}",
-                    "file:///" + os.path.abspath(html).replace(os.sep, "/")], capture_output=True, timeout=120)
+                    "file:///" + os.path.abspath(html).replace(os.sep, "/")], capture_output=True, timeout=120, check=True)
+    if not os.path.isfile(out):
+        raise RuntimeError(f"Chrome did not write {out}")
     return out
 
 
@@ -49,7 +51,9 @@ def compare(folder, surface, crop, cols=4, scale=1.0):
     out = os.path.join(folder, name + ".png")
     subprocess.run([CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--allow-file-access-from-files",
                     f"--window-size={cols * (tw + 3)},{rows * (th + 3)}", f"--screenshot={os.path.abspath(out)}",
-                    "file:///" + os.path.abspath(html).replace(os.sep, "/")], capture_output=True, timeout=120)
+                    "file:///" + os.path.abspath(html).replace(os.sep, "/")], capture_output=True, timeout=120, check=True)
+    if not os.path.isfile(out):
+        raise RuntimeError(f"Chrome did not write {out}")
     return out
 
 
